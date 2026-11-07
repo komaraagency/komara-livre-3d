@@ -2,7 +2,7 @@
    Pages en reseau d'abord, assets en cache + revalidation.
    Aucune version a incrementer : le contenu se met a jour seul. */
 
-const CACHE = "komara-livre-v12";
+const CACHE = "komara-livre-v13";
 const PAGES = CACHE + "-pages";
 const ASSETS = CACHE + "-assets";
 
