@@ -413,46 +413,55 @@
       return { texte: "Les pages ne sont pas encore chargées. Réessaie dans un instant.", page: -1 };
     }
 
-    // index des mots par passage (contenu + mots-cles + titre)
-    const indexe = liste.map((psg) => {
-      const texte = mots(psg.texte + " " + psg.complement);
-      return Object.assign({}, psg, { sac: new Set(texte) });
+    /* ---- 1. choisir la PAGE : ses mots-clés et son titre pèsent le plus ---- */
+    const scorePage = pages.map((p) => {
+      const sac = new Set(mots((p.motsCles || "") + " " + (p.titre || "") + " " + (p.chapitre || "")));
+      let s = 0;
+      mq.forEach((m) => {
+        if (sac.has(m)) s += 5;
+        else if (Array.from(sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) s += 2;
+      });
+      return s;
     });
 
-    // frequence documentaire : un mot present partout pese moins
-    const N = indexe.length;
-    const df = {};
-    indexe.forEach((p) => p.sac.forEach((m) => { df[m] = (df[m] || 0) + 1; }));
-    const poids = (m) => {
-      const d = df[m] || 0;
-      if (!d) {
-        // recherche par prefixe (ex: "coute" vs "cout")
-        let proche = 0;
-        Object.keys(df).forEach((k) => { if (k.indexOf(m.slice(0, 4)) === 0) proche = Math.max(proche, df[k]); });
-        return proche ? 0.6 + Math.log(1 + N / proche) : 0;
-      }
-      return 1 + Math.log(1 + N / d);
-    };
+    let meilleurePage = -1;
+    let meilleurScore = 0;
+    scorePage.forEach((sc, i) => {
+      if (sc > meilleurScore) { meilleurScore = sc; meilleurePage = i; }
+    });
 
-    const notes = indexe.map((psg) => {
+    /* ---- 2. choisir le meilleur PASSAGE ---- */
+    const dansLaPage = meilleurePage >= 0 ? liste.filter((x) => x.page === meilleurePage) : liste;
+    const vivier = dansLaPage.length ? dansLaPage : liste;
+
+    const N = vivier.length;
+    const df = {};
+    const sacs = vivier.map((psg) => {
+      const sac = new Set(mots(psg.texte + " " + psg.complement));
+      sac.forEach((m) => { df[m] = (df[m] || 0) + 1; });
+      return sac;
+    });
+    const poids = (m) => 1 + Math.log(1 + N / (df[m] || 1));
+
+    const notes = vivier.map((psg, i) => {
       let score = 0;
       mq.forEach((m) => {
-        if (psg.sac.has(m)) score += 2 * poids(m);
-        else if (Array.from(psg.sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) score += poids(m);
+        if (sacs[i].has(m)) score += 2 * poids(m);
+        else if (Array.from(sacs[i]).some((x) => x.indexOf(m.slice(0, 4)) === 0)) score += poids(m);
       });
-      // un peu de penalite pour les passages tres longs
-      score = score / Math.log(2 + psg.texte.length / 90);
-      return Object.assign({}, psg, { score });
+      return Object.assign({}, psg, { score: score / Math.log(2 + psg.texte.length / 90) });
     }).sort((a, b) => b.score - a.score);
 
     const best = notes[0];
-    if (!best || best.score < 1.1) {
+
+    if (!best || (meilleurScore === 0 && (!best.score || best.score < 1.1))) {
       return {
         texte: "Je n'ai pas encore cette réponse dans le livre. Écris à Komara Agency sur WhatsApp, la réponse arrive en 2 minutes.",
         page: -1,
         wa: true
       };
     }
+
     const t = best.texte;
     return { texte: t.length > 420 ? t.slice(0, 415) + "…" : t, page: best.page };
   }
