@@ -398,7 +398,7 @@
       const complement = " " + (info.motsCles || "") + " " + (info.titre || "");
       z.querySelectorAll("p, li, h2, h3, td").forEach((el) => {
         const t = el.innerText.replace(/\s+/g, " ").trim();
-        if (t.length > 20) out.push({ texte: t, page: i, titre: info.titre || "", complement });
+        if (t.length > 8) out.push({ texte: t, page: i, titre: info.titre || "", complement });
       });
     });
     return out;
@@ -413,13 +413,17 @@
       return { texte: "Les pages ne sont pas encore chargées. Réessaie dans un instant.", page: -1 };
     }
 
-    /* ---- 1. choisir la PAGE : ses mots-clés et son titre pèsent le plus ---- */
-    const scorePage = pages.map((p) => {
-      const sac = new Set(mots((p.motsCles || "") + " " + (p.titre || "") + " " + (p.chapitre || "")));
+    /* ---- 1. choisir la PAGE : les mots rares pèsent plus que les mots banals ---- */
+    const sacsPage = pages.map((p) => new Set(mots((p.motsCles || "") + " " + (p.titre || "") + " " + (p.chapitre || ""))));
+    const dfPage = {};
+    sacsPage.forEach((sac) => sac.forEach((m) => { dfPage[m] = (dfPage[m] || 0) + 1; }));
+    const poidsPage = (m) => 1 + Math.log(1 + pages.length / (dfPage[m] || 1));
+
+    const scorePage = sacsPage.map((sac) => {
       let s = 0;
       mq.forEach((m) => {
-        if (sac.has(m)) s += 5;
-        else if (Array.from(sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) s += 2;
+        if (sac.has(m)) s += poidsPage(m);
+        else if (Array.from(sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) s += poidsPage(m) * 0.4;
       });
       return s;
     });
