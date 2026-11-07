@@ -60,7 +60,7 @@
   function construirePages() {
     pages = [];
     (LIVRE.pages || []).forEach((p) => {
-      pages.push({ id: p.id, chapitre: p.chapitre, titre: p.titre, html: p.html, vierge: false });
+      pages.push({ id: p.id, chapitre: p.chapitre, titre: p.titre, motsCles: p.motsCles || "", html: p.html, vierge: false });
     });
     (LIVRE.vierges || []).forEach((v, i) => {
       pages.push({ id: "vierge-" + i, chapitre: v.chapitre, titre: v.titre, html: "", vierge: true });
