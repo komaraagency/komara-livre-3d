@@ -1,6 +1,9 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>verif livre</title>
-<style>body{margin:0;background:#111;color:#8f8;font-family:monospace;font-size:13px;padding:12px;white-space:pre-wrap}
-iframe{width:390px;height:780px;border:6px solid #000;border-radius:24px;display:block;margin-top:10px}</style>
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>verif livre</title>
+<style>
+body{margin:0;background:#111;color:#8f8;font-family:monospace;font-size:12.5px;padding:10px;white-space:pre-wrap}
+iframe{width:390px;height:790px;border:6px solid #000;border-radius:24px;display:block;margin-top:8px}
+</style>
 </head><body>
 <div id="mes">mesure…</div>
 <iframe id="f" src="about:blank"></iframe>
@@ -10,37 +13,55 @@ iframe{width:390px;height:780px;border:6px solid #000;border-radius:24px;display
   try {
     for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
     for (const n of await caches.keys()) await caches.delete(n);
-    l.push("caches et service worker purges");
-  } catch (e) { l.push("purge impossible: " + e.message); }
+    l.push("OK service worker et caches purges");
+  } catch (e) { l.push("purge: " + e.message); }
+
   const f = document.getElementById("f");
   f.src = "index.html?t=" + Date.now();
   f.onload = () => setTimeout(() => {
     try {
       const d = f.contentDocument, w = f.contentWindow;
-      const bot = d.querySelector("#panneau-bot"), menu = d.querySelector("#panneau-menu"), voile = d.querySelector("#voile");
-      const css = (el) => w.getComputedStyle(el).display;
-      l.push("panneau-bot display  : " + css(bot));
-      l.push("panneau-menu display : " + css(menu));
-      l.push("voile display        : " + css(voile));
-      l.push("pages construites    : " + (w.__livre ? w.__livre.total() : "?"));
-      l.push("index courant        : " + (w.__livre ? w.__livre.index() : "?"));
-      const couv = d.querySelector("#couverture");
-      l.push("couverture z-index   : " + w.getComputedStyle(couv).zIndex + " (doit etre eleve)");
-      const page1 = d.querySelectorAll(".feuille")[1];
-      l.push("page 1 z-index       : " + (page1 ? w.getComputedStyle(page1).zIndex : "?"));
-      // test du bot
+      const st = (sel) => w.getComputedStyle(d.querySelector(sel));
+      l.push("");
+      l.push("PANNEAUX (doivent etre fermes)");
+      l.push("  bot   : " + st("#panneau-bot").display);
+      l.push("  menu  : " + st("#panneau-menu").display);
+      l.push("  voile : " + st("#voile").display);
+
+      l.push("");
+      l.push("IDENTITE (comme l app Komara)");
+      l.push("  fond         : " + (st("html").backgroundImage.indexOf("90deg") > -1 ? "tricolore gauche>droite OUI" : "AUTRE"));
+      l.push("  logo barre   : " + st(".topbar-logo").width + "  (app 2.7rem)");
+      l.push("  titre barre  : " + st(".topbar-titre strong").fontSize);
+      l.push("  icone onglet : " + st(".o-ico").fontSize + "  (app 2rem)");
+      l.push("  texte onglet : " + st(".o-txt").fontSize + "  (app 0.82rem)");
+      l.push("  texte livre  : " + st(".papier").fontSize);
+      l.push("  nb onglets   : " + d.querySelectorAll(".tabbar .onglet").length);
+
+      l.push("");
+      l.push("EMPILEMENT");
+      l.push("  couverture z : " + st("#couverture").zIndex + " (eleve quand fermee)");
+      l.push("  pages        : " + (w.__livre ? w.__livre.total() : "?"));
+
+      l.push("");
+      l.push("LE LIVRE REPOND (attendu entre parentheses)");
       if (w.__livre) {
-        const r1 = w.__livre.repondre("combien coute un bot WhatsApp ?");
-        l.push("Q: combien coute un bot WhatsApp ?");
-        l.push("R: (page " + (r1.page + 1) + ") " + r1.texte.slice(0, 120));
-        const r2 = w.__livre.repondre("quelles erreurs éviter ?");
-        l.push("Q: quelles erreurs éviter ?");
-        l.push("R: (page " + (r2.page + 1) + ") " + r2.texte.slice(0, 100));
+        [["combien coute un bot WhatsApp ?", 3],
+         ["combien coute un site vitrine ?", 5],
+         ["comment structurer un bot ?", 4],
+         ["quelles erreurs eviter ?", 6],
+         ["c est quoi un agent IA premium ?", 3]
+        ].forEach(function (paire) {
+          const r = w.__livre.repondre(paire[0]);
+          const ok = (r.page + 1) === paire[1] ? "OK " : "NON(p." + paire[1] + ") ";
+          l.push("  " + ok + "p." + (r.page + 1) + "  " + paire[0]);
+          l.push("        > " + r.texte.slice(0, 85));
+        });
       }
       document.getElementById("mes").textContent = l.join("\n");
     } catch (e) {
       document.getElementById("mes").textContent = l.join("\n") + "\nerreur: " + e.message;
     }
-  }, 2600);
+  }, 2800);
 })();
 </script></body></html>
