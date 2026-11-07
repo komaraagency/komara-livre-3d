@@ -16,7 +16,6 @@
   const WA = "212701986219";
   const LIEN = "https://komaraagency.github.io/komara-livre-3d/";
   const DUREE = 850;
-  const PIED = "komara Agency 🇬🇳 pour vous servir";
 
   /* ================= LANGUES ================= */
   const T = {
@@ -33,6 +32,7 @@
       exporter: "Exporter mes notes", effacer: "Effacer mes notes",
       langue: "Langue", parler: "Parler à Komara",
       note: "Les feuilles vierges se remplissent directement dans le livre. Ton texte reste sur ton téléphone.",
+      suite: "Fais défiler : la suite et l'exercice sont en bas",
       couverture: "Couverture", page: "Page", sur: "sur",
       ouvrePage: "Ouvrir la page", lienCopie: "Lien copié ✓", indecrisible: "Cette page est vide",
       pasVoix: "La lecture vocale n'est pas disponible sur ce navigateur",
@@ -58,6 +58,7 @@
       exporter: "Export my notes", effacer: "Clear my notes",
       langue: "Language", parler: "Talk to Komara",
       note: "Blank pages are filled inside the book. Your text stays on your phone.",
+      suite: "Scroll down: more and the exercise below",
       couverture: "Cover", page: "Page", sur: "of",
       ouvrePage: "Open page", lienCopie: "Link copied ✓", indecrisible: "This page is empty",
       pasVoix: "Speech is not available in this browser",
@@ -83,6 +84,7 @@
       exporter: "تصدير ملاحظاتي", effacer: "حذف ملاحظاتي",
       langue: "اللغة", parler: "تحدث مع كومارا",
       note: "الصفحات الفارغة تكتب فيها داخل الكتاب. نصك يبقى على هاتفك.",
+      suite: "مرر للأسفل: التتمة والتمرين",
       couverture: "الغلاف", page: "صفحة", sur: "من",
       ouvrePage: "افتح الصفحة", lienCopie: "تم نسخ الرابط ✓", indecrisible: "هذه الصفحة فارغة",
       pasVoix: "القراءة الصوتية غير متوفرة في هذا المتصفح",
@@ -163,7 +165,12 @@
   function piedDePage() {
     const p = document.createElement("div");
     p.className = "pied-page";
-    p.textContent = PIED;
+    p.append("komara Agency ");
+    const d = document.createElement("span");
+    d.className = "drap-gn";
+    d.setAttribute("role", "img");
+    d.setAttribute("aria-label", "Guinée");
+    p.append(d, " pour vous servir");
     return p;
   }
 
@@ -225,8 +232,22 @@
       const corps = document.createElement("div");
       corps.className = "page-corps";
       corps.innerHTML = page.html;
-      recto.append(corps, piedDePage());
+      const suite = document.createElement("div");
+      suite.className = "suite-bas";
+      const sp = document.createElement("span");
+      sp.textContent = "▼ " + t("suite");
+      suite.appendChild(sp);
+      recto.append(corps, suite, piedDePage());
       restaurerZones(recto, page.id);
+      const maj = () => {
+        const reste = corps.scrollHeight - corps.scrollTop - corps.clientHeight;
+        suite.classList.toggle("visible", reste > 24);
+      };
+      corps.addEventListener("scroll", maj, { passive: true });
+      // mesure apres affichage, et apres chaque changement de taille
+      setTimeout(maj, 300);
+      if (window.ResizeObserver) new ResizeObserver(maj).observe(corps);
+      recto.__majSuite = maj;
     }
     // le tete par-dessus (injecte en premier pour rester en haut)
     recto.insertBefore(tete(numero, page.chapitre), recto.firstChild);
@@ -343,8 +364,9 @@
 
     if (sens === 0) {
       // on attend un vrai debut de geste
-      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
-      if (Math.abs(deltaY) > Math.abs(deltaX)) { actif = false; return; }
+      if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return;
+      // le geste est vertical (ou pas assez horizontal) : on laisse defiler la page
+      if (Math.abs(deltaY) * 1.15 > Math.abs(deltaX)) { actif = false; return; }
       sens = deltaX < 0 ? -1 : 1;
 
       if (sens === -1) {
@@ -439,21 +461,50 @@
   /* ---------------- Lecture a voix haute ---------------- */
   function textePage() {
     if (index < 0) {
-      return "Komara Academy. Apprendre le HTML pas a pas. Touche la couverture pour ouvrir le livre.";
+      return "Komara Academy. Apprendre le HTML pas à pas. Touche la couverture pour ouvrir le livre.";
     }
     const f = feuilles()[index];
     if (!f) return "";
     const z = f.querySelector(".page-corps") || f.querySelector(".champ-corps");
     if (!z) return "";
     const c = z.cloneNode(true);
-    c.querySelectorAll("pre, code, .exo-zone, .exo-label, .exo-reponse, .pied-page, script, style").forEach((n) => n.remove());
-    const blocs = [];
-    c.querySelectorAll("h2, h3, p, li, td, blockquote").forEach((el) => {
-      if (el.querySelector("p, li, blockquote")) return;
-      const s = (el.textContent || "").replace(/\s+/g, " ").trim();
-      if (s.length > 1) blocs.push(s);
-    });
-    return blocs.join(". ");
+
+    // on retire seulement ce qui ne se lit pas : le code brut, les zones de saisie, le pied
+    c.querySelectorAll("pre, script, style, .exo-reponse, .pied-page, .suite-bas, .vierge-badge").forEach((n) => n.remove());
+
+    const out = [];
+    const ajoute = (txt) => { const v = (txt || "").replace(/\s+/g, " ").trim(); if (v.length > 1) out.push(v); };
+
+    const parcourir = (noeud) => {
+      Array.from(noeud.children).forEach((el) => {
+        const tag = el.tagName;
+        if (el.classList.contains("exo-zone")) {
+          ajoute(lang === "en" ? "Now write your answer in the box below." :
+                 lang === "ar" ? "اكتب جوابك في الخانة أسفله." :
+                 "Écris maintenant ta réponse dans la zone en dessous.");
+          return;
+        }
+        // mini-titre de bloc : Objectif, A retenir, Exercice, Corrige...
+        const etiquette = el.querySelector && el.querySelector(":scope > b, :scope > strong, :scope > .etiq, :scope > .cle-titre");
+        if (tag === "TABLE") {
+          const lignes = Array.from(el.querySelectorAll("tr")).map((tr) => {
+            const cells = Array.from(tr.children).map((td) => td.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
+            return cells.join(", ");
+          }).filter(Boolean);
+          lignes.forEach((l) => ajoute(l));
+          return;
+        }
+        if (/^(H1|H2|H3|H4)$/.test(tag)) { ajoute(el.textContent); return; }
+        if (/^(P|LI|BLOCKQUOTE|DT|DD|FIGCAPTION|CAPTION)$/.test(tag)) { ajoute(el.textContent); return; }
+        if (el.children.length && !/^(SPAN|CODE|A|B|STRONG|EM|I)$/.test(tag)) {
+          // bloc composite (objectif, a retenir, exercice, corrige...) : on lit tout son contenu en ordre
+          if (el.querySelector("p, li, h2, h3, table, .exo-zone, div")) { parcourir(el); return; }
+        }
+        ajoute(el.textContent);
+      });
+    };
+    parcourir(c);
+    return out.join(". ");
   }
 
   function nettoyerPourVoix(txt) {
@@ -472,6 +523,13 @@
          .replace(/\bJS\b/g, "J S")
          .replace(/\bW3C\b/g, "W 3 C")
          .replace(/\bMDN\b/g, "M D N");
+
+    // balises HTML : on les dit comme on les prononce
+    const BAL = { h1:"h un", h2:"h deux", h3:"h trois", h4:"h quatre", h5:"h cinq", h6:"h six",
+      p:"p", br:"b r", hr:"h r", em:"em", img:"image", src:"s r c", alt:"alt", href:"h ref",
+      th:"t h", td:"t d", tr:"t r", li:"l i", ul:"u l", ol:"o l", nav:"nave", div:"dive", span:"spane",
+      a:"a", id:"i d", css:"c s s", js:"j s", abbr:"abréviation", colspan:"col span", rowspan:"row span" };
+    s = s.replace(/\b(h[1-6]|br|hr|img|src|href|abbr|colspan|rowspan|th|td|tr|li|ul|ol|nav|div|span|id)\b/gi, (m) => BAL[m.toLowerCase()] || m);
 
     // prononciation francaise des mots importes
     s = s.replace(/\bbots\b/gi, "botes")

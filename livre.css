@@ -201,7 +201,11 @@ body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   scrollbar-width: none;
+  padding-bottom: 2.2em;
   font-size: 1em;
   line-height: 1.72;
 }
@@ -853,4 +857,55 @@ html[dir="rtl"] .msg.bot { align-self: flex-end; }
   word-break: break-all;
   -webkit-user-select: all;
   user-select: all;
+}
+
+/* drapeau de Guinee dessine : identique sur tous les telephones
+   (l'emoji 🇬🇳 sort parfois en Mali selon la police du systeme) */
+.drap-gn {
+  display: inline-block;
+  width: 1.28em;
+  height: 0.86em;
+  vertical-align: -0.08em;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ce1126 0 33.34%, #fcd116 33.34% 66.67%, #009460 66.67% 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+}
+.couv-auteur .drap-gn { width: 1.2em; height: 0.8em; }
+
+/* ================= INDICE : IL Y A UNE SUITE EN BAS ================= */
+.papier { --suite: 0; }
+.suite-bas {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 2.1em;
+  height: 3.6em;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(246, 242, 231, 0) 0%, rgba(246, 242, 231, 0.96) 78%);
+  opacity: 0;
+  transition: opacity 0.25s;
+  z-index: 3;
+}
+.suite-bas.visible { opacity: 1; }
+.suite-bas span {
+  margin-bottom: 0.25em;
+  font-size: 0.74em;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #6b5200;
+  background: var(--or);
+  border-radius: 20px;
+  padding: 0.28em 0.95em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  animation: rebond 1.4s ease-in-out infinite;
+}
+@keyframes rebond { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+
+/* mot en cours de lecture */
+.lu-maintenant {
+  background: rgba(255, 215, 0, 0.45);
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.45);
 }
