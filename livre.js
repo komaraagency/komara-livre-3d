@@ -935,6 +935,17 @@
   $("#nom-livre").textContent = LIVRE.titre || "Komara Academy";
   $("#question").placeholder = lang === "ar" ? "سؤالك..." : lang === "en" ? "Your question..." : "Ta question...";
 
+  /* DIAG TEMPORAIRE */
+  setTimeout(() => {
+    try {
+      const r = (el) => { if (!el) return "0"; const b = el.getBoundingClientRect(); return Math.round(b.width) + "x" + Math.round(b.height); };
+      const f = feuilles()[0];
+      const corps = f && f.querySelector(".page-corps");
+      const foot = f && f.querySelector(".pied-page");
+      etatPageEl.textContent = "D etagere:" + r(document.querySelector(".etagere")) + " scene:" + r(sceneEl) + " livre:" + r(livreEl) + " feuille:" + r(f) + " corps:" + r(corps) + " pied:" + r(foot) + " vh:" + window.innerHeight;
+    } catch (e) { etatPageEl.textContent = "D err " + e.message; }
+  }, 1500);
+
   setTimeout(() => { if (index < 0) toast(t("toastOuvre")); }, 1500);
 
   window.__livre = {
