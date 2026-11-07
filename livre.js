@@ -827,13 +827,20 @@
     copierLien();
   }
 
+  function montrerLien() {
+    const el = $("#lien-visible");
+    if (!el) return;
+    el.hidden = false;
+    el.textContent = LIEN;
+    try { el.scrollIntoView({ block: "nearest" }); } catch (_) {}
+  }
+
   function copierLien() {
     const fini = () => toast(t("lienCopie"));
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(LIEN).then(fini).catch(() => { window.prompt("Lien :", LIEN); });
+      navigator.clipboard.writeText(LIEN).then(fini).catch(() => { montrerLien(); });
     } else {
-      window.prompt("Lien :", LIEN);
-      fini();
+      montrerLien();
     }
   }
 

@@ -841,3 +841,16 @@ html[dir="rtl"] .cle { border-left: 0; border-right: 4px solid #d4a900; border-r
 html[dir="rtl"] pre.code { border-left: 0; border-right: 3px solid var(--or); direction: ltr; text-align: left; }
 html[dir="rtl"] .msg.moi { align-self: flex-start; }
 html[dir="rtl"] .msg.bot { align-self: flex-end; }
+
+.lien-visible {
+  margin: -0.2rem 0 0.4rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px dashed rgba(255, 215, 0, 0.5);
+  color: var(--or);
+  font-size: 0.82rem;
+  word-break: break-all;
+  -webkit-user-select: all;
+  user-select: all;
+}
