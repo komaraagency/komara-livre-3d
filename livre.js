@@ -166,12 +166,14 @@
     if (!animer) livreEl.classList.add("glisse");
 
     couvertureEl.classList.toggle("tournee", index >= 0);
+    // fermee : la couverture couvre tout ; ouverte : elle passe derriere
+    couvertureEl.style.zIndex = index >= 0 ? "10" : "1200";
 
     feuilles().forEach((f, i) => {
       const tournee = i < index;
       f.classList.toggle("tournee", tournee);
       f.style.transform = "";
-      f.style.zIndex = tournee ? String(20 + i) : String(900 - i);
+      f.style.zIndex = tournee ? String(20 + i) : String(400 - i);
     });
 
     if (!animer) {
