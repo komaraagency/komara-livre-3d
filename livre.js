@@ -423,7 +423,7 @@
       let s = 0;
       mq.forEach((m) => {
         if (sac.has(m)) s += poidsPage(m);
-        else if (Array.from(sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) s += poidsPage(m) * 0.4;
+        else if (Array.from(sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) s += poidsPage(m) * 0.8;
       });
       return s;
     });
@@ -440,8 +440,9 @@
 
     const N = vivier.length;
     const df = {};
-    const sacs = vivier.map((psg) => {
-      const sac = new Set(mots(psg.texte + " " + psg.complement));
+    const sacsTxt = vivier.map((psg) => new Set(mots(psg.texte)));
+    const sacs = vivier.map((psg, i) => {
+      const sac = new Set([...sacsTxt[i], ...mots(psg.complement)]);
       sac.forEach((m) => { df[m] = (df[m] || 0) + 1; });
       return sac;
     });
@@ -450,8 +451,9 @@
     const notes = vivier.map((psg, i) => {
       let score = 0;
       mq.forEach((m) => {
-        if (sacs[i].has(m)) score += 2 * poids(m);
-        else if (Array.from(sacs[i]).some((x) => x.indexOf(m.slice(0, 4)) === 0)) score += poids(m);
+        if (sacsTxt[i].has(m)) score += 2.5 * poids(m);
+        else if (sacs[i].has(m)) score += poids(m) * 0.8;
+        else if (Array.from(sacs[i]).some((x) => x.indexOf(m.slice(0, 4)) === 0)) score += poids(m) * 0.4;
       });
       return Object.assign({}, psg, { score: score / Math.log(2 + psg.texte.length / 90) });
     }).sort((a, b) => b.score - a.score);
