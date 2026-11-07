@@ -10,7 +10,7 @@ window.LIVRE = {
   pages: [
     /* ---------------- SOMMAIRE ---------------- */
     {
-      id: "sommaire",
+      id: "sommaire", motsCles: "sommaire contenu plan chapitres programme",
       titre: "Sommaire",
       chapitre: "Ouverture",
       html: `
@@ -28,7 +28,7 @@ window.LIVRE = {
 
     /* ---------------- COURS 1 ---------------- */
     {
-      id: "c1p1",
+      id: "c1p1", motsCles: "whatsapp vendre pourquoi canal client message rapidite",
       chapitre: "Cours 1",
       titre: "Pourquoi WhatsApp vend mieux que tout le reste",
       html: `
@@ -42,7 +42,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p2",
+      id: "c1p2", motsCles: "prix tarif coute combien niveaux bot telegram whatsapp agent ia budget choisir",
       chapitre: "Cours 1",
       titre: "Les 3 niveaux de bot",
       html: `
@@ -65,7 +65,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p3",
+      id: "c1p3", motsCles: "scenario etapes structure comment construire relance catalogue commande objections",
       chapitre: "Cours 1",
       titre: "Le scénario qui vend, en 5 étapes",
       html: `
@@ -81,7 +81,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p4",
+      id: "c1p4", motsCles: "prix tarif grille paiement acompte solde maintenance combien coute budget site vitrine 250 logo",
       chapitre: "Cours 1",
       titre: "Fixer ses prix sans se brader",
       html: `
@@ -100,7 +100,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p5",
+      id: "c1p5", motsCles: "erreurs erreur eviter piege probleme debutant test",
       chapitre: "Cours 1",
       titre: "Les 5 erreurs qui tuent un bot",
       html: `
@@ -118,7 +118,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p6",
+      id: "c1p6", motsCles: "action commencer devis contact whatsapp komara commander",
       chapitre: "Cours 1",
       titre: "Passer à l'action",
       html: `

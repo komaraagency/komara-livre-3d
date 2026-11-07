@@ -16,33 +16,27 @@
 </head>
 <body>
 
-<!-- ================= BARRE DU HAUT ================= -->
-<header class="barre-haut">
-  <div class="marque">
-    <img src="icon-192.png" alt="" class="marque-ico">
-    <div class="marque-txt">
-      <strong id="nom-livre">Komara Academy</strong>
-      <span id="etat-page">Couverture</span>
-    </div>
+<!-- ================= BARRE DU HAUT (identique a l'app Komara) ================= -->
+<header class="topbar">
+  <img src="assets/logo-128.png" alt="" class="topbar-logo">
+  <div class="topbar-titre">
+    <strong id="nom-livre">Komara Academy</strong>
+    <span id="etat-page">Couverture</span>
   </div>
-  <div class="actions">
-    <button id="btn-lire" class="rond" type="button" title="Lire à voix haute" aria-label="Lire à voix haute">🔊</button>
-    <button id="btn-bot" class="rond" type="button" title="Poser une question" aria-label="Poser une question">🤖</button>
-    <button id="btn-menu" class="rond" type="button" title="Options" aria-label="Options">☰</button>
-  </div>
+  <button id="btn-menu" class="rond" type="button" title="Options" aria-label="Options">☰</button>
 </header>
 
 <!-- ================= LE LIVRE ================= -->
 <main class="etagere">
   <div class="scene" id="scene">
-    <div class="livre" id="livre" aria-live="polite">
+    <div class="livre" id="livre">
 
       <!-- Couverture -->
       <div class="feuille couverture" id="couverture" data-type="couverture">
         <div class="face recto">
           <div class="couv-cadre">
             <div class="couv-drapeau"></div>
-            <img src="icon-192.png" alt="" class="couv-logo">
+            <img src="assets/logo-256.png" alt="" class="couv-logo">
             <h1 class="couv-titre">Komara<br>Academy</h1>
             <p class="couv-sous">Le guide du business digital</p>
             <div class="couv-ligne"></div>
@@ -61,21 +55,29 @@
 
       <!-- Les pages sont ajoutées par livre.js -->
 
-      <!-- tranche du livre (décor) -->
       <div class="tranche" aria-hidden="true"></div>
     </div>
   </div>
 </main>
 
-<!-- ================= BARRE DU BAS ================= -->
-<footer class="barre-bas">
-  <button id="btn-prec" class="nav" type="button" aria-label="Page précédente">‹</button>
-  <button id="btn-sommaire" class="compteur" type="button">
-    <span id="compteur">Couverture</span>
-    <small>Sommaire</small>
+<!-- ================= BARRE DU BAS (tabbar de l'app) ================= -->
+<nav class="tabbar" aria-label="Navigation du livre">
+  <button id="btn-prec" class="onglet" type="button" aria-label="Page précédente">
+    <span class="o-ico">‹</span><span class="o-txt">Précédent</span>
   </button>
-  <button id="btn-suiv" class="nav" type="button" aria-label="Page suivante">›</button>
-</footer>
+  <button id="btn-sommaire" class="onglet" type="button" aria-label="Sommaire">
+    <span class="o-ico">📑</span><span class="o-txt">Sommaire</span>
+  </button>
+  <button id="btn-lire" class="onglet" type="button" aria-label="Écouter la page">
+    <span class="o-ico">🔊</span><span class="o-txt">Écouter</span>
+  </button>
+  <button id="btn-bot" class="onglet" type="button" aria-label="Poser une question">
+    <span class="o-ico">🤖</span><span class="o-txt">Le livre</span>
+  </button>
+  <button id="btn-suiv" class="onglet" type="button" aria-label="Page suivante">
+    <span class="o-ico">›</span><span class="o-txt">Suivant</span>
+  </button>
+</nav>
 
 <!-- ================= PANNEAU DU BOT ================= -->
 <aside class="panneau" id="panneau-bot">

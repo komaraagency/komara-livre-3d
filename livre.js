@@ -151,12 +151,10 @@
 
   function majTextes() {
     if (index < 0) {
-      compteurEl.textContent = "Couverture";
       etatPageEl.textContent = "Couverture";
     } else {
       const p = pages[index];
-      compteurEl.textContent = (index + 1) + " / " + pages.length;
-      etatPageEl.textContent = p ? (p.chapitre || "Page") : "Page";
+      etatPageEl.textContent = "Page " + (index + 1) + " sur " + pages.length + (p && p.chapitre ? " · " + p.chapitre : "");
     }
     btnPrec.disabled = index < 0;
     btnSuiv.disabled = index >= pages.length - 1;
@@ -364,6 +362,7 @@
     window.speechSynthesis.speak(u);
     enLecture = true;
     btnLire.classList.add("actif");
+    if (btnLire.classList) btnLire.classList.add("actif");
     btnLire.textContent = "⏸";
   }
   btnLire.addEventListener("click", lire);
@@ -395,9 +394,11 @@
     feuilles().forEach((f, i) => {
       const z = f.querySelector(".page-corps") || f.querySelector(".champ-corps");
       if (!z) return;
+      const info = pages[i] || {};
+      const complement = " " + (info.motsCles || "") + " " + (info.titre || "");
       z.querySelectorAll("p, li, h2, h3, td").forEach((el) => {
         const t = el.innerText.replace(/\s+/g, " ").trim();
-        if (t.length > 20) out.push({ texte: t, page: i, titre: (pages[i] && pages[i].titre) || "" });
+        if (t.length > 20) out.push({ texte: t, page: i, titre: info.titre || "", complement });
       });
     });
     return out;
@@ -407,18 +408,45 @@
     const mq = mots(question);
     if (!mq.length) return { texte: "Écris ta question avec un peu plus de détails 🙂", page: -1 };
 
-    const notes = passages().map((psg) => {
-      const mp = mots(psg.texte + " " + psg.titre);
+    const liste = passages();
+    if (!liste.length) {
+      return { texte: "Les pages ne sont pas encore chargées. Réessaie dans un instant.", page: -1 };
+    }
+
+    // index des mots par passage (contenu + mots-cles + titre)
+    const indexe = liste.map((psg) => {
+      const texte = mots(psg.texte + " " + psg.complement);
+      return Object.assign({}, psg, { sac: new Set(texte) });
+    });
+
+    // frequence documentaire : un mot present partout pese moins
+    const N = indexe.length;
+    const df = {};
+    indexe.forEach((p) => p.sac.forEach((m) => { df[m] = (df[m] || 0) + 1; }));
+    const poids = (m) => {
+      const d = df[m] || 0;
+      if (!d) {
+        // recherche par prefixe (ex: "coute" vs "cout")
+        let proche = 0;
+        Object.keys(df).forEach((k) => { if (k.indexOf(m.slice(0, 4)) === 0) proche = Math.max(proche, df[k]); });
+        return proche ? 0.6 + Math.log(1 + N / proche) : 0;
+      }
+      return 1 + Math.log(1 + N / d);
+    };
+
+    const notes = indexe.map((psg) => {
       let score = 0;
       mq.forEach((m) => {
-        if (mp.indexOf(m) !== -1) score += 3;
-        else if (mp.some((x) => x.indexOf(m.slice(0, 5)) === 0)) score += 1;
+        if (psg.sac.has(m)) score += 2 * poids(m);
+        else if (Array.from(psg.sac).some((x) => x.indexOf(m.slice(0, 4)) === 0)) score += poids(m);
       });
+      // un peu de penalite pour les passages tres longs
+      score = score / Math.log(2 + psg.texte.length / 90);
       return Object.assign({}, psg, { score });
     }).sort((a, b) => b.score - a.score);
 
     const best = notes[0];
-    if (!best || best.score < 3) {
+    if (!best || best.score < 1.1) {
       return {
         texte: "Je n'ai pas encore cette réponse dans le livre. Écris à Komara Agency sur WhatsApp, la réponse arrive en 2 minutes.",
         page: -1,
