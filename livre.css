@@ -22,8 +22,8 @@
   --encre-doux: #6b6455;
 
   /* échelle identique à l'app Komara */
-  --u: clamp(15px, 4.45vw, 56px);
-  --marge: clamp(10px, 3vw, 28px);
+  --u: clamp(15px, 4.45vw, 26px);
+  --marge: clamp(10px, 3vw, 22px);
 
   --duree: 0.85s;
   --courbe: cubic-bezier(0.22, 0.75, 0.2, 1);
