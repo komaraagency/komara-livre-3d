@@ -636,3 +636,43 @@ body {
 @media (min-aspect-ratio: 1/1) and (min-width: 700px) {
   .scene { max-width: 40rem; }
 }
+
+
+/* ================= BLOCS DE CODE (cours developpeur) ================= */
+pre.code {
+  margin: 0.35em 0 0.85em;
+  padding: 0.7em 0.75em;
+  background: #0d0d13;
+  color: #e7e7f0;
+  border-left: 3px solid var(--or);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.74em;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  tab-size: 2;
+}
+pre.code .c { color: #7f8a99; }
+pre.code .t { color: #ffd166; }
+pre.code .a { color: #7dd3fc; }
+code.enligne {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  background: rgba(255, 215, 0, 0.16);
+  border-radius: 4px;
+  padding: 0.05em 0.32em;
+}
+.jour {
+  display: inline-block;
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #050505;
+  background: var(--or);
+  border-radius: 20px;
+  padding: 0.22em 0.7em;
+  margin: 0 0 0.6em;
+}

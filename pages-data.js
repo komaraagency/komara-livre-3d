@@ -1,150 +1,107 @@
-/* Contenu du livre.
-   Cours 1 : redige. Cours suivants : feuilles vierges, a remplir dans l'app
-   (le texte saisi est enregistre sur l'appareil) ou ici en HTML. */
+/* Contenu du livre : programme « Deviens developpeur en 7 jours ».
+   Genere par tools/gen_pages.py — modifier le generateur, pas ce fichier. */
 
 window.LIVRE = {
-  titre: "Komara Academy",
-  sousTitre: "Le guide du business digital",
+  titre: "Deviens développeur",
+  sousTitre: "en 7 jours chez Komara",
   auteur: "Komara Agency 🇬🇳",
   edition: "Édition 2026",
   pages: [
-    /* ---------------- SOMMAIRE ---------------- */
     {
-      id: "sommaire", motsCles: "sommaire contenu plan chapitres programme",
-      titre: "Sommaire",
+      id: "sommaire",
       chapitre: "Ouverture",
-      html: `
-        <h2>Ce que tu vas apprendre</h2>
-        <ul class="sommaire">
-          <li><b>Cours 1</b> — Vendre avec WhatsApp <span>6 pages</span></li>
-          <li class="vide"><b>Cours 2</b> — À toi d'écrire <span>vierge</span></li>
-          <li class="vide"><b>Cours 3</b> — À toi d'écrire <span>vierge</span></li>
-          <li class="vide"><b>Cours 4</b> — À toi d'écrire <span>vierge</span></li>
-          <li class="vide"><b>Cours 5</b> — À toi d'écrire <span>vierge</span></li>
-        </ul>
-        <p class="note">Touche 🔊 en haut pour écouter la page. Touche 🤖 pour poser une question au livre. Tourne la page avec le doigt.</p>
-      `
-    },
-
-    /* ---------------- COURS 1 ---------------- */
-    {
-      id: "c1p1", motsCles: "whatsapp vendre pourquoi canal client message rapidite",
-      chapitre: "Cours 1",
-      titre: "Pourquoi WhatsApp vend mieux que tout le reste",
-      html: `
-        <p>En Guinée, au Maroc et partout en Afrique de l'Ouest, ton client n'installe pas une application pour t'acheter. Il a déjà WhatsApp, ouvert toute la journée.</p>
-        <p>Vendre par WhatsApp, ce n'est pas envoyer des messages à la main toute la journée. C'est mettre en place un système qui répond au client <b>dans la seconde</b>, même quand tu dors.</p>
-        <div class="cle">
-          <b>La règle des 5 minutes</b>
-          <p>Un client qui écrit et qui attend plus de 10 minutes est un client que tu perds. Un bot répond en 2 secondes, à 3h du matin comme à midi.</p>
-        </div>
-        <p>Ton objectif n'est pas d'avoir « un chatbot ». Ton objectif est de ne plus jamais perdre une commande parce que tu n'as pas vu le message.</p>
-      `
+      titre: "Sommaire",
+      motsCles: "sommaire programme plan modules jours lecons parcours",
+      html: "<h2>Deviens développeur en 7 jours</h2>\n        <p>Ce livre ne t'apprend pas la théorie. Chaque jour tu écris du code, et le septième tu mets ton site en ligne. À la fin, tu as un portfolio à montrer et un premier site à vendre.</p>\n        <table class=\"grille\">\n          <tr><th>Module</th><th>Jours</th></tr>\n          <tr><td>1. Les bases</td><td>Jour 1-2</td></tr>\n          <tr><td>2. Le style</td><td>Jour 3-4</td></tr>\n          <tr><td>3. Le cerveau</td><td>Jour 5-6</td></tr>\n          <tr><td>4. Le business</td><td>Jour 7</td></tr>\n        </table>\n        <p><b>Les 11 leçons</b></p>\n        <ul class=\"sommaire\">\n          <li><b>1</b> — C'est quoi vraiment HTML <span>J1</span></li>\n          <li><b>2</b> — Ton premier site en 5 min <span>J1</span></li>\n          <li><b>3</b> — CSS, ton site stylé <span>J2</span></li>\n          <li><b>4</b> — Néon et dark mode <span>J3</span></li>\n          <li><b>5</b> — Photos, vidéos, réseaux <span>J3</span></li>\n          <li><b>6</b> — Responsive téléphone <span>J4</span></li>\n          <li><b>7</b> — JS, boutons et mode nuit <span>J5</span></li>\n          <li><b>8</b> — Jeu « Clique le plus vite » <span>J5</span></li>\n          <li><b>9</b> — Calculatrice et pseudo <span>J6</span></li>\n          <li><b>10</b> — En ligne avec GitHub <span>J7</span></li>\n          <li><b>11</b> — Vends ton premier site <span>J7</span></li>\n        </ul>\n        <p class=\"note\">Chaque page suit le même plan : l'idée, le code, l'exercice. Touche 🔊 pour écouter et 🤖 pour poser une question.</p>"
     },
     {
-      id: "c1p2", motsCles: "prix tarif coute combien niveaux bot telegram whatsapp agent ia budget choisir",
-      chapitre: "Cours 1",
-      titre: "Les 3 niveaux de bot",
-      html: `
-        <p>Il existe trois niveaux. Choisis selon ton budget et ton volume de clients, jamais selon la mode.</p>
-        <div class="carte-niveau">
-          <h3>1. Bot Telegram scripté</h3>
-          <p class="prix">50 €</p>
-          <p>Un catalogue à boutons. Le client clique, choisit, commande. Simple, rapide, parfait pour tester une offre.</p>
-        </div>
-        <div class="carte-niveau">
-          <h3>2. Bot WhatsApp vendeur</h3>
-          <p class="prix">100 €</p>
-          <p>Il répond aux questions, présente les prix, relance les clients qui hésitent et prend la commande. C'est le niveau le plus rentable pour une petite entreprise.</p>
-        </div>
-        <div class="carte-niveau">
-          <h3>3. Agent IA Premium</h3>
-          <p class="prix">150 €</p>
-          <p>Multilingue, avec mémoire, connecté à ton fichier clients. Il parle comme un vrai vendeur et se souvient de chaque client.</p>
-        </div>
-      `
+      id: "l1",
+      chapitre: "Module 1 · Les bases",
+      titre: "Leçon 1 — C'est quoi vraiment HTML ?",
+      motsCles: "html balise structure squelette tiktok header main footer page code langage lecture navigateur",
+      html: "<p class=\"jour\">Jour 1</p>\n        <h2>Le squelette, pas la déco</h2>\n        <p>Ouvre TikTok et regarde bien : une barre en haut, la vidéo au centre, le texte du compte, et les onglets en bas. Ce sont des blocs empilés. HTML, c'est exactement ça : la liste des blocs d'une page.</p>\n        <p>Une balise s'ouvre et se ferme : <code class=\"enligne\">&lt;p&gt;mon texte&lt;/p&gt;</code>. Tout ce qui est dedans appartient au bloc. La balise dit <b>ce que c'est</b>, jamais <b>à quoi ça ressemble</b>.</p>\n        <pre class=\"code\">&lt;!DOCTYPE html&gt;\n&lt;html lang=&quot;fr&quot;&gt;\n&lt;head&gt;\n  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;title&gt;Mon TikTok&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;header&gt; Logo · Recherche &lt;/header&gt;\n  &lt;main&gt; La vidéo qui défile &lt;/main&gt;\n  &lt;footer&gt; Accueil · Découvrir · + · Messages · Profil &lt;/footer&gt;\n&lt;/body&gt;\n&lt;/html&gt;</pre>\n        <p>Quatre blocs, et tu reconnais une application entière. Chaque site du monde tient dans cette idée : <code class=\"enligne\">head</code> pour les informations invisibles, <code class=\"enligne\">body</code> pour ce que les gens voient.</p>\n        <div class=\"cle\"><b>La règle</b><p>Si tu hésites entre deux balises, choisis celle qui décrit le contenu. <i>header</i> pour le haut, <i>main</i> pour le contenu, <i>footer</i> pour le bas.</p></div>\n        <p class=\"note\">À toi : ouvre Instagram, YouTube et Facebook. Compte les blocs de chaque page. Tu verras toujours le même trio : haut, centre, bas.</p>"
     },
     {
-      id: "c1p3", motsCles: "scenario etapes structure comment construire relance catalogue commande objections structurer etapes bot scenario",
-      chapitre: "Cours 1",
-      titre: "Le scénario qui vend, en 5 étapes",
-      html: `
-        <p>Un bot qui vend suit toujours la même route. Copie cette structure :</p>
-        <ol class="etapes">
-          <li><b>Accueil</b> — Bonjour + le nom de ton entreprise + une question simple : « Tu cherches quoi aujourd'hui ? »</li>
-          <li><b>Catalogue</b> — 3 à 6 produits maximum, avec le prix affiché. Cacher le prix fait fuir.</li>
-          <li><b>Réponse aux objections</b> — trop cher, livraison, garantie. Prépare tes réponses une fois, le bot les répète.</li>
-          <li><b>Commande</b> — nom, quartier, numéro, produit. Quatre champs, pas plus.</li>
-          <li><b>Relance</b> — si le client disparaît 2 heures, le bot envoie un message doux : « Je te garde ta commande ? »</li>
-        </ol>
-        <p class="note">La relance est l'étape que tout le monde oublie. C'est souvent elle qui fait la moitié du chiffre.</p>
-      `
+      id: "l2",
+      chapitre: "Module 1 · Les bases",
+      titre: "Leçon 2 — Ton premier site en 5 minutes",
+      motsCles: "premier site page presentation titre paragraphe image liste lien index.html creer fichier chrome enregistrer",
+      html: "<p class=\"jour\">Jour 1</p>\n        <h2>Ta page de présentation</h2>\n        <p>Sur ton ordinateur : nouveau dossier <code class=\"enligne\">mon-site</code>, puis dedans un fichier texte que tu renommes <code class=\"enligne\">index.html</code>. Double clic, il s'ouvre dans Chrome. Ton site existe.</p>\n        <pre class=\"code\">&lt;!DOCTYPE html&gt;\n&lt;html lang=&quot;fr&quot;&gt;\n&lt;head&gt;\n  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;title&gt;Ndine — Créateur de sites&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;h1&gt;Salut, moi c&#x27;est Ndine 👋&lt;/h1&gt;\n  &lt;p&gt;Je crée des sites et des bots WhatsApp pour les commerces.&lt;/p&gt;\n\n  &lt;img src=&quot;photo.jpg&quot; alt=&quot;Ma photo&quot; width=&quot;200&quot;&gt;\n\n  &lt;h2&gt;Ce que je fais&lt;/h2&gt;\n  &lt;ul&gt;\n    &lt;li&gt;Site vitrine&lt;/li&gt;\n    &lt;li&gt;Bot WhatsApp&lt;/li&gt;\n    &lt;li&gt;Logo et affiche&lt;/li&gt;\n  &lt;/ul&gt;\n\n  &lt;a href=&quot;https://wa.me/212701986219&quot;&gt;Écris-moi sur WhatsApp&lt;/a&gt;\n&lt;/body&gt;\n&lt;/html&gt;</pre>\n        <p>Les balises utiles dès maintenant : <code class=\"enligne\">h1</code> le grand titre (un seul par page), <code class=\"enligne\">h2</code> les sous-titres, <code class=\"enligne\">p</code> le texte, <code class=\"enligne\">img</code> une image, <code class=\"enligne\">a</code> un lien.</p>\n        <div class=\"cle\"><b>La règle</b><p>Concentre-toi sur ce qui compte : un nom, une phrase qui dit ce que tu fais, une photo, et un bouton WhatsApp. C'est tout.</p></div>\n        <p class=\"note\">À toi : change le titre par ton vrai prénom, remplace la photo par la tienne, puis enregistre et rafraîchis avec Ctrl+R.</p>"
     },
     {
-      id: "c1p4", motsCles: "prix tarif grille paiement acompte solde maintenance combien coute budget site vitrine 250 logo",
-      chapitre: "Cours 1",
-      titre: "Fixer ses prix sans se brader",
-      html: `
-        <p>Un bot n'est pas une dépense, c'est un employé qui ne dort pas. Ton prix doit refléter ça.</p>
-        <table class="grille">
-          <tr><th>Prestation</th><th>Prix</th></tr>
-          <tr><td>Bot Telegram scripté</td><td>50 €</td></tr>
-          <tr><td>Bot WhatsApp vendeur</td><td>100 €</td></tr>
-          <tr><td>Agent IA Premium</td><td>150 €</td></tr>
-          <tr><td>Maintenance mensuelle</td><td>50 €/mois</td></tr>
-          <tr><td>Site vitrine</td><td>250 €</td></tr>
-          <tr><td>Logo seul</td><td>50 €</td></tr>
-        </table>
-        <p><b>La règle du démarrage :</b> 50 % à la commande, 50 % à la livraison. Ne livre jamais un fichier final avant le solde.</p>
-        <p class="note">Pourquoi 50 € de maintenance ? Parce qu'un bot vit : les prix changent, WhatsApp change ses règles, les clients changent de numéro. La maintenance, c'est ce qui garde ton bot rentable dans le temps.</p>
-      `
+      id: "l3",
+      chapitre: "Module 1 · Les bases",
+      titre: "Leçon 3 — CSS, ton site stylé",
+      motsCles: "css style couleur police classe selecteur feuille style.css link propriete valeur rendu beau",
+      html: "<p class=\"jour\">Jour 2</p>\n        <h2>HTML construit, CSS habille</h2>\n        <p>Crée un fichier <code class=\"enligne\">style.css</code> à côté de ton <code class=\"enligne\">index.html</code>, puis branche-le dans le <code class=\"enligne\">head</code> :</p>\n        <pre class=\"code\">&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;</pre>\n        <p>Une règle CSS, c'est toujours la même chose : qui, quoi, combien.</p>\n        <pre class=\"code\">body {\n  background: #0a0a0a;\n  color: #ffffff;\n  font-family: Arial, sans-serif;\n}\n\nh1 {\n  color: #FFD700;\n  text-align: center;\n}\n\na {\n  background: #25D366;\n  color: #000000;\n  padding: 12px 20px;\n  border-radius: 30px;\n  text-decoration: none;\n  font-weight: bold;\n}</pre>\n        <p>Pour viser un seul élément et pas tous les autres, tu ajoutes une classe. HTML : <code class=\"enligne\">&lt;p class=\"rose\"&gt;...&lt;/p&gt;</code>. CSS : <code class=\"enligne\">.rose { color: #ff2e63; }</code>. Le point devant le nom, c'est la classe.</p>\n        <div class=\"cle\"><b>La règle</b><p>Change une seule chose, regarde, corrige. Trois modifications réussies valent mieux que quinze lignes copiées que tu ne comprends pas.</p></div>\n        <p class=\"note\">À toi : mets ton titre en jaune, ton fond en noir, et ton lien WhatsApp en pilule verte.</p>"
     },
     {
-      id: "c1p5", motsCles: "erreurs erreur eviter piege probleme debutant test",
-      chapitre: "Cours 1",
-      titre: "Les 5 erreurs qui tuent un bot",
-      html: `
-        <ol class="erreurs">
-          <li><b>Parler trop.</b> Un bot qui écrit un roman fait fuir. Une question, trois réponses possibles, on avance.</li>
-          <li><b>Cacher les prix.</b> « Contactez-nous pour le prix » = client perdu.</li>
-          <li><b>Trop de menus.</b> Plus de 3 niveaux de boutons, le client se noie.</li>
-          <li><b>Aucune sortie vers un humain.</b> Prévois toujours « Parler à un humain » : c'est ce qui rassure.</li>
-          <li><b>Lancer sans tester.</b> Essaie ton bot comme un client, sur un vrai téléphone, 20 fois avant de le montrer.</li>
-        </ol>
-        <div class="cle">
-          <b>Le test final</b>
-          <p>Donne ton bot à un ami qui ne connaît pas ton activité. S'il arrive à commander sans t'appeler, ton bot est prêt.</p>
-        </div>
-      `
+      id: "l4",
+      chapitre: "Module 2 · Le style",
+      titre: "Leçon 4 — Couleurs, polices, effet néon",
+      motsCles: "couleur palette neon glow dark mode police google fonts variable css var contraste sombre",
+      html: "<p class=\"jour\">Jour 3</p>\n        <h2>Le look streamer</h2>\n        <p>Deux couleurs suffisent : un fond très sombre et une couleur qui brille. Le néon, c'est une ombre lumineuse appliquée au texte.</p>\n        <pre class=\"code\">:root {\n  --fond: #08080c;\n  --or: #FFD700;\n  --neon: #00e5ff;\n}\n\nbody {\n  background: var(--fond);\n  color: #eaeaf2;\n}\n\nh1 {\n  color: var(--or);\n  text-shadow: 0 0 8px var(--or), 0 0 26px var(--neon);\n}\n\n.bouton {\n  background: transparent;\n  border: 2px solid var(--neon);\n  color: var(--neon);\n  padding: 12px 24px;\n  border-radius: 30px;\n  box-shadow: 0 0 14px var(--neon);\n}</pre>\n        <p>Pour une police de gamer, ajoute-la tout en haut du CSS :</p>\n        <pre class=\"code\">@import url(&#x27;https://fonts.googleapis.com/css2?family=Orbitron:wght@700&amp;display=swap&#x27;);\n\nh1, .bouton {\n  font-family: &#x27;Orbitron&#x27;, Arial, sans-serif;\n  letter-spacing: 1px;\n}</pre>\n        <p>Les variables <code class=\"enligne\">--or</code> et <code class=\"enligne\">--neon</code> sont rangées dans <code class=\"enligne\">:root</code>. Change la valeur une fois, tout le site change.</p>\n        <div class=\"cle\"><b>La règle</b><p>Deux couleurs plus un accent, pas plus. Trop de néon tue le néon, et un texte qui brille trop ne se lit plus.</p></div>\n        <p class=\"note\">À toi : essaie trois couleurs d'accent au choix, puis garde celle qui se lit le mieux sur ton téléphone.</p>"
     },
     {
-      id: "c1p6", motsCles: "action commencer devis contact whatsapp komara commander",
-      chapitre: "Cours 1",
-      titre: "Passer à l'action",
-      html: `
-        <p>Tu as maintenant le plan complet : un canal, trois niveaux d'offre, un scénario en 5 étapes, des prix clairs et les pièges à éviter.</p>
-        <p>La différence entre ceux qui vendent et les autres, ce n'est pas l'idée. C'est le fait de commencer cette semaine.</p>
-        <div class="cle">
-          <b>Ta prochaine étape</b>
-          <p>Écris à Komara Agency sur WhatsApp avec ton activité et ton budget. Tu reçois un devis en 2 minutes, et ton bot peut être en ligne en quelques jours.</p>
-        </div>
-        <p class="cta-livre">
-          <a href="https://wa.me/212701986219?text=Bonjour%20Komara%20Agency%2C%20j%27ai%20lu%20le%20livre%20et%20je%20veux%20un%20bot" target="_blank" rel="noopener">💬 Demander mon devis</a>
-        </p>
-      `
-    }
+      id: "l5",
+      chapitre: "Module 2 · Le style",
+      titre: "Leçon 5 — Photos, vidéos YouTube, réseaux",
+      motsCles: "image photo video youtube iframe reseaux sociaux instagram tiktok lien target alt media integrer",
+      html: "<p class=\"jour\">Jour 3</p>\n        <h2>Ton site devient vivant</h2>\n        <p>Une image se pose avec <code class=\"enligne\">img</code>. Le texte <code class=\"enligne\">alt</code> décrit l'image : il sert si elle ne charge pas.</p>\n        <pre class=\"code\">&lt;img src=&quot;photo.jpg&quot; alt=&quot;Moi en train de coder&quot; width=&quot;300&quot;&gt;\n\n&lt;!-- une video YouTube, sans telecharger la video --&gt;\n&lt;iframe width=&quot;100%&quot; height=&quot;215&quot;\n        src=&quot;https://www.youtube.com/embed/VIDEO_ID&quot;\n        title=&quot;Ma video&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;</pre>\n        <p>Pour une vidéo, copie l'identifiant après <code class=\"enligne\">watch?v=</code> et colle-le à la place de <code class=\"enligne\">VIDEO_ID</code>.</p>\n        <p>Tes réseaux, en boutons :</p>\n        <pre class=\"code\">&lt;a href=&quot;https://instagram.com/toncompte&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Instagram&lt;/a&gt;\n&lt;a href=&quot;https://tiktok.com/@toncompte&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;TikTok&lt;/a&gt;\n&lt;a href=&quot;https://wa.me/212701986219&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;WhatsApp&lt;/a&gt;</pre>\n        <p><code class=\"enligne\">target=\"_blank\"</code> ouvre le lien dans un nouvel onglet : ton site reste ouvert derrière.</p>\n        <div class=\"cle\"><b>La règle</b><p>Range tes images dans le même dossier que ton site, avec des noms simples et sans espaces : photo.jpg, pas Ma photo du bled (2).jpg.</p></div>\n        <p class=\"note\">À toi : ajoute une capture de ton projet préféré et un lien vers ton compte TikTok.</p>"
+    },
+    {
+      id: "l6",
+      chapitre: "Module 2 · Le style",
+      titre: "Leçon 6 — Responsive, beau sur téléphone",
+      motsCles: "responsive mobile telephone viewport media query grille flex pourcentage max-width adaptation petit ecran",
+      html: "<p class=\"jour\">Jour 4</p>\n        <h2>Le même site, tous les écrans</h2>\n        <p>Sur téléphone, tout ce qui dépasse en largeur crée une barre de défilement horizontale. Deux lignes règlent ça :</p>\n        <pre class=\"code\">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;\n\nimg {\n  max-width: 100%;\n  height: auto;\n}</pre>\n        <p>Ensuite tu travailles en pourcentage, jamais en pixels fixes :</p>\n        <pre class=\"code\">.conteneur {\n  max-width: 900px;\n  margin: 0 auto;\n  padding: 0 16px;\n}\n\n.cartes {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\n  gap: 14px;\n}\n\n@media (max-width: 600px) {\n  h1 { font-size: 26px; }\n  .cartes { grid-template-columns: 1fr; }\n}</pre>\n        <p><code class=\"enligne\">auto-fit</code> place autant de cartes que l'écran le permet : trois sur ordinateur, une sur téléphone. La <code class=\"enligne\">media query</code> s'applique uniquement sous 600 pixels de large.</p>\n        <div class=\"cle\"><b>La règle</b><p>Teste toujours sur ton téléphone, pas dans la fenêtre de ton ordinateur. La moitié du trafic d'un commerce vient du téléphone.</p></div>\n        <p class=\"note\">À toi : réduis la fenêtre de Chrome avec la souris jusqu'à la taille d'un téléphone et corrige ce qui déborde.</p>"
+    },
+    {
+      id: "l7",
+      chapitre: "Module 3 · Le cerveau",
+      titre: "Leçon 7 — JS, boutons qui réagissent",
+      motsCles: "javascript js script bouton clic click eventlistener queryselector classlist mode nuit interaction dynamique",
+      html: "<p class=\"jour\">Jour 5</p>\n        <h2>Donner vie à la page</h2>\n        <p>HTML est le squelette, CSS l'apparence, JavaScript le mouvement. Le JS se place juste avant <code class=\"enligne\">&lt;/body&gt;</code>, dans <code class=\"enligne\">&lt;script&gt;</code>.</p>\n        <pre class=\"code\">&lt;button id=&quot;nuit&quot;&gt;Mode nuit&lt;/button&gt;\n\n&lt;script&gt;\n  const bouton = document.getElementById(&#x27;nuit&#x27;);\n\n  bouton.addEventListener(&#x27;click&#x27;, () =&gt; {\n    document.body.classList.toggle(&#x27;nuit&#x27;);\n  });\n&lt;/script&gt;</pre>\n        <p>Et côté CSS, une seule règle fait tout le travail :</p>\n        <pre class=\"code\">body.nuit {\n  background: #050508;\n  color: #ffffff;\n}</pre>\n        <p>Traduction : « trouve le bouton, écoute le clic, ajoute ou retire la classe <code class=\"enligne\">nuit</code> au body ». Un clic, un changement, c'est ça tout le JavaScript du débutant.</p>\n        <div class=\"cle\"><b>La règle</b><p>Le JS ne dessine rien. Il ajoute ou retire des classes, et c'est le CSS qui fait le visuel. Sépare toujours les deux.</p></div>\n        <p class=\"note\">À toi : ajoute un deuxième bouton qui change le texte du titre avec textContent.</p>"
+    },
+    {
+      id: "l8",
+      chapitre: "Module 3 · Le cerveau",
+      titre: "Leçon 8 — Ton premier jeu : Clique le plus vite",
+      motsCles: "jeu clique plus vite score chrono timer setTimeout random hasard mini jeu javascript compteur record",
+      html: "<p class=\"jour\">Jour 5</p>\n        <h2>Un jeu complet en 25 lignes</h2>\n        <p>Un bouton qui se déplace au hasard, un score, un chrono de 15 secondes. C'est tout.</p>\n        <pre class=\"code\">&lt;button id=&quot;cible&quot;&gt;Clique !&lt;/button&gt;\n&lt;p&gt;Score : &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;&lt;/p&gt;\n\n&lt;script&gt;\n  let score = 0;\n  const cible = document.getElementById(&#x27;cible&#x27;);\n  const affichage = document.getElementById(&#x27;score&#x27;);\n\n  function placer() {\n    cible.style.position = &#x27;fixed&#x27;;\n    cible.style.left = (Math.random() * 80) + &#x27;vw&#x27;;\n    cible.style.top  = (Math.random() * 70) + &#x27;vh&#x27;;\n  }\n\n  cible.addEventListener(&#x27;click&#x27;, () =&gt; {\n    score = score + 1;\n    affichage.textContent = score;\n    placer();\n  });\n\n  placer();\n  setTimeout(() =&gt; {\n    alert(&#x27;Temps ecoule ! Score final : &#x27; + score);\n    score = 0;\n    affichage.textContent = &#x27;0&#x27;;\n    placer();\n  }, 15000);\n&lt;/script&gt;</pre>\n        <p><code class=\"enligne\">Math.random()</code> donne un nombre au hasard entre 0 et 1. <code class=\"enligne\">setTimeout</code> exécute le code après un délai, en millisecondes.</p>\n        <div class=\"cle\"><b>La règle</b><p>Un jeu se juge en 10 secondes. Si on ne comprend pas quoi faire au premier regard, simplifie encore.</p></div>\n        <p class=\"note\">À toi : passe le chrono à 10 secondes, puis garde le meilleur score dans localStorage pour qu'il survive au rechargement.</p>"
+    },
+    {
+      id: "l9",
+      chapitre: "Module 3 · Le cerveau",
+      titre: "Leçon 9 — Calculatrice et générateur de pseudo",
+      motsCles: "calculatrice calcul parseFloat input nombre resultat generateur pseudo gaming random tableau concatener",
+      html: "<p class=\"jour\">Jour 6</p>\n        <h2>Deux outils, une heure</h2>\n        <p><b>La calculatrice.</b> Deux champs, une opération, un résultat.</p>\n        <pre class=\"code\">&lt;input id=&quot;a&quot; type=&quot;number&quot; placeholder=&quot;12&quot;&gt;\n&lt;select id=&quot;op&quot;&gt;\n  &lt;option&gt;+&lt;/option&gt;&lt;option&gt;-&lt;/option&gt;&lt;option&gt;*&lt;/option&gt;&lt;option&gt;/&lt;/option&gt;\n&lt;/select&gt;\n&lt;input id=&quot;b&quot; type=&quot;number&quot; placeholder=&quot;8&quot;&gt;\n&lt;button id=&quot;calc&quot;&gt;=&lt;/button&gt;\n&lt;p id=&quot;res&quot;&gt;&lt;/p&gt;\n\n&lt;script&gt;\n  document.getElementById(&#x27;calc&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {\n    const a = parseFloat(document.getElementById(&#x27;a&#x27;).value);\n    const b = parseFloat(document.getElementById(&#x27;b&#x27;).value);\n    const op = document.getElementById(&#x27;op&#x27;).value;\n    let r;\n\n    if (op === &#x27;+&#x27;) r = a + b;\n    if (op === &#x27;-&#x27;) r = a - b;\n    if (op === &#x27;*&#x27;) r = a * b;\n    if (op === &#x27;/&#x27;) r = (b === 0) ? &#x27;Division impossible&#x27; : a / b;\n\n    document.getElementById(&#x27;res&#x27;).textContent = &#x27;Resultat : &#x27; + r;\n  });\n&lt;/script&gt;</pre>\n        <p><b>Le générateur de pseudo.</b> On mélange un début, une fin et un nombre.</p>\n        <pre class=\"code\">const debuts = [&#x27;Dark&#x27;, &#x27;Neo&#x27;, &#x27;Cyber&#x27;, &#x27;Shadow&#x27;, &#x27;Neon&#x27;];\nconst fins   = [&#x27;Wolf&#x27;, &#x27;Sniper&#x27;, &#x27;Ninja&#x27;, &#x27;Ghost&#x27;, &#x27;King&#x27;];\n\nfunction pseudo() {\n  const d = debuts[Math.floor(Math.random() * debuts.length)];\n  const f = fins[Math.floor(Math.random() * fins.length)];\n  return d + f + Math.floor(Math.random() * 99);\n}\n\nconsole.log(pseudo());  // exemple : CyberGhost42</pre>\n        <div class=\"cle\"><b>La règle</b><p>Un champ de formulaire donne toujours du texte. Convertis avec parseFloat avant de calculer, sinon 2 + 2 fait 22.</p></div>\n        <p class=\"note\">À toi : ajoute la multiplication par un pourcentage : utile pour calculer une remise.</p>"
+    },
+    {
+      id: "l10",
+      chapitre: "Module 4 · Le business",
+      titre: "Leçon 10 — En ligne gratuitement avec GitHub",
+      motsCles: "github pages mettre en ligne publier heberger gratuit url depot upload netlify domaine deploiement",
+      html: "<p class=\"jour\">Jour 7</p>\n        <h2>Ton site a une adresse</h2>\n        <p>Un site qui reste sur ton ordinateur n'existe pas. GitHub l'héberge gratuitement, sans publicité.</p>\n        <ol class=\"etapes\"><li>Crée un compte sur github.com (gratuit).</li><li>New repository : nom <code class=\"enligne\">mon-site</code>, coche <b>Public</b>, puis Create.</li><li>Add file, Upload files : dépose <code class=\"enligne\">index.html</code>, <code class=\"enligne\">style.css</code> et tes images. Commit.</li><li>Settings, puis Pages. Branche <b>main</b>, dossier <b>/ (root)</b>, Save.</li><li>Attends une minute. Ton adresse apparaît : <code class=\"enligne\">https://tonpseudo.github.io/mon-site/</code></li></ol>\n        <p>Le fichier doit s'appeler <code class=\"enligne\">index.html</code> et être à la racine du dépôt. C'est le seul fichier que GitHub ouvre automatiquement.</p>\n        <p>Pour mettre à jour : Upload files, remplace le fichier, Commit. Le site change en une minute. Si tu préfères le glisser-déposer, Netlify fait la même chose : tu déposes ton dossier, il te donne une adresse.</p>\n        <div class=\"cle\"><b>La règle</b><p>Ouvre toujours ton lien dans une fenêtre de navigation privée avant de l'envoyer à un client. Si ça marche là, ça marche partout.</p></div>\n        <p class=\"note\">À toi : mets ta page de présentation en ligne et envoie le lien à un ami sur WhatsApp.</p>"
+    },
+    {
+      id: "l11",
+      chapitre: "Module 4 · Le business",
+      titre: "Leçon 11 — Vends ton premier site",
+      motsCles: "vendre client prix tarif devis prospect commerce whatsapp acompte maintenance offre premier client business",
+      html: "<p class=\"jour\">Jour 7</p>\n        <h2>Le code ne paie pas, les clients oui</h2>\n        <p>Tu sais faire un site. Il te manque une seule chose : quelqu'un qui paie. Les clients sont à dix minutes de chez toi.</p>\n        <p><b>Où chercher :</b> les commerces qui ont une page Instagram et aucun site. Restaurants, coiffeurs, boutiques de vêtements, écoles privées, cliniques, salles de sport. Regarde leur bio Instagram : si le lien manque, c'est un client.</p>\n        <p><b>La méthode qui marche :</b> ne propose pas, montre. Choisis un commerce, fais sa page en une heure avec son nom et ses photos, puis envoie :</p>\n        <div class=\"cle\"><b>Le message</b><p>Bonjour, j'ai fait une page de présentation pour votre boutique, à votre nom. Regardez ici : [lien]. Si ça vous plaît, je la mets en ligne avec votre numéro WhatsApp et votre adresse pour 250 €. Vous ne payez pas tant que vous ne l'avez pas vue.</p></div>\n        <p><b>Tes prix :</b></p>\n        <table class=\"grille\">\n          <tr><th>Prestation</th><th>Prix</th></tr>\n          <tr><td>Site vitrine 1 page</td><td>250 €</td></tr>\n          <tr><td>Bot WhatsApp vendeur</td><td>100 €</td></tr>\n          <tr><td>Maintenance par mois</td><td>50 €</td></tr>\n          <tr><td>Logo seul</td><td>50 €</td></tr>\n          <tr><td>Site + bot + logo</td><td>350 €</td></tr>\n        </table>\n        <p>50 % à la commande, 50 % à la livraison. Jamais le fichier final avant le solde. Et propose la maintenance à 50 € par mois : les prix changent, les photos changent, ton client n'a pas envie de s'en occuper.</p>\n        <div class=\"cle\"><b>La règle</b><p>Ne vends pas un site, vends des clients qui écrivent. Un site vitrine n'est pas joli, il fait sonner ton WhatsApp.</p></div>\n        <p class=\"note\">À toi : liste cinq commerces autour de chez toi qui n'ont pas de site. Fais la page du premier aujourd'hui.</p>"
+    },
+    {
+      id: "projet",
+      chapitre: "Projet final",
+      titre: "Ton portfolio + certificat Développeur Junior",
+      motsCles: "projet final portfolio certificat dev junior validation checklist publier rendre examen komara",
+      html: "<p class=\"jour\">Jour 7</p>\n        <h2>La preuve que tu sais faire</h2>\n        <p>Un portfolio, c'est une seule page qui montre trois choses que tu as faites. C'est ce que tu envoies au lieu de dire « je sais coder ».</p>\n        <p><b>Ta page contient :</b></p>\n        <ol class=\"etapes\"><li>Ton nom et une phrase qui dit ce que tu fais.</li><li>Trois projets, chacun avec une capture d'écran et un lien vers le site en ligne.</li><li>Ton WhatsApp en bouton visible.</li><li>Ton style : fond sombre, une couleur, une police.</li><li>Rien qui déborde sur téléphone.</li><li>Une adresse GitHub Pages propre.</li></ol>\n        <p><b>Pour valider le certificat Komara Développeur Junior</b>, envoie à Komara Agency : ton lien de portfolio, plus le lien d'un site que tu as publié toi-même. On vérifie trois points : le site s'ouvre, il s'affiche bien sur téléphone, et un client peut te contacter en un clic.</p>\n        <div class=\"cle\"><b>Trois projets suffisent</b><p>Ta page de présentation. Un site pour un vrai commerce. Le jeu « Clique le plus vite ». C'est tout ce qu'un client veut voir.</p></div>\n        <p><a class=\"cta-livre\" href=\"https://wa.me/212701986219?text=Bonjour%20Komara%20Agency%2C%20voici%20mon%20portfolio%20de%20developpeur%20junior\" target=\"_blank\" rel=\"noopener\">💬 Envoyer mon portfolio</a></p>\n        <p class=\"note\">Tu as fini les 11 leçons. La suite, c'est de vendre : chaque site livré t'apprend plus que dix tutoriels.</p>"
+    },
   ],
 
-  /* Feuilles vierges : l'utilisateur ecrit directement dans l'app.
-     8 pages pretes, on peut en ajouter d'autres. */
   vierges: [
-    { chapitre: "Cours 2", titre: "Titre du cours 2" },
-    { chapitre: "Cours 3", titre: "Titre du cours 3" },
-    { chapitre: "Cours 4", titre: "Titre du cours 4" },
-    { chapitre: "Cours 5", titre: "Titre du cours 5" },
-    { chapitre: "Cours 6", titre: "Titre du cours 6" },
-    { chapitre: "Cours 7", titre: "Titre du cours 7" },
-    { chapitre: "Cours 8", titre: "Titre du cours 8" },
-    { chapitre: "Cours 9", titre: "Titre du cours 9" }
+    {"chapitre": "Mes notes", "titre": "Notes du jour 1"},
+    {"chapitre": "Mes notes", "titre": "Notes du jour 2"},
   ]
 };
