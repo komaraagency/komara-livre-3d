@@ -909,3 +909,29 @@ html[dir="rtl"] .msg.bot { align-self: flex-end; }
   border-radius: 4px;
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.45);
 }
+
+/* ================= CORRIGE REPLIABLE ================= */
+details.corrige {
+  margin: 0.6em 0 0.4em;
+  border: 1.5px solid rgba(0, 133, 63, 0.45);
+  border-radius: 12px;
+  background: rgba(0, 133, 63, 0.07);
+  overflow: hidden;
+}
+details.corrige > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.7em 0.9em;
+  font-weight: 800;
+  font-size: 0.95em;
+  color: #0b5a2c;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+details.corrige > summary::-webkit-details-marker { display: none; }
+details.corrige > summary::before { content: "✅"; }
+details.corrige > summary::after { content: "▾"; margin-left: auto; transition: transform 0.2s; }
+details.corrige[open] > summary::after { transform: rotate(180deg); }
+details.corrige > :not(summary) { margin-left: 0.9em; margin-right: 0.9em; }
+details.corrige > pre.code:last-child, details.corrige > p:last-child { margin-bottom: 0.9em; }

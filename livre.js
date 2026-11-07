@@ -484,6 +484,13 @@
                  "Écris maintenant ta réponse dans la zone en dessous.");
           return;
         }
+        // corrige replie : la voix le signale, elle ne le lit pas d'office
+        if (tag === "DETAILS") {
+          ajoute(lang === "en" ? "The answer is available below. Open it after you try." :
+                 lang === "ar" ? "الجواب متوفر أسفله. افتحه بعد أن تحاول." :
+                 "Le corrigé est juste en dessous. Ouvre-le après avoir essayé.");
+          return;
+        }
         // mini-titre de bloc : Objectif, A retenir, Exercice, Corrige...
         const etiquette = el.querySelector && el.querySelector(":scope > b, :scope > strong, :scope > .etiq, :scope > .cle-titre");
         if (tag === "TABLE") {
