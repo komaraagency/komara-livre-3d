@@ -456,14 +456,18 @@ body {
 .compteur small { font-size: 10.5px; color: #8f8a80; text-transform: uppercase; letter-spacing: 1px; }
 
 /* ---------------- PANNEAUX ---------------- */
-.voile {
+.voile { display: none; }
+.voile.visible {
+  display: block;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(2px);
   z-index: 40;
 }
-.panneau {
+.panneau { display: none; }
+.panneau.ouvert {
+  display: flex;
   position: fixed;
   left: 0; right: 0; bottom: 0;
   z-index: 50;

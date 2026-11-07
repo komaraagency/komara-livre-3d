@@ -481,18 +481,19 @@
   }
 
   function ouvrirPanneau(p) {
-    [panneauBot, panneauMenu].forEach((x) => { x.hidden = true; });
-    p.hidden = false;
-    voile.hidden = false;
+    [panneauBot, panneauMenu].forEach((x) => x.classList.remove("ouvert"));
+    p.classList.add("ouvert");
+    voile.classList.add("visible");
     if (p === panneauBot) setTimeout(() => $("#question").focus(), 200);
   }
   function fermerPanneaux() {
-    [panneauBot, panneauMenu].forEach((x) => { x.hidden = true; });
-    voile.hidden = true;
+    [panneauBot, panneauMenu].forEach((x) => x.classList.remove("ouvert"));
+    voile.classList.remove("visible");
   }
+  const estOuvert = (p) => p.classList.contains("ouvert");
 
   $("#btn-bot").addEventListener("click", () => {
-    if (panneauBot.hidden) {
+    if (!estOuvert(panneauBot)) {
       if (!fil.childElementCount) { bulle(ACCUEIL_BOT, "bot"); proposer(); }
       ouvrirPanneau(panneauBot);
     } else fermerPanneaux();
@@ -510,7 +511,7 @@
 
   /* ---------------- Menu ---------------- */
   $("#btn-menu").addEventListener("click", () => {
-    if (panneauMenu.hidden) ouvrirPanneau(panneauMenu);
+    if (!estOuvert(panneauMenu)) ouvrirPanneau(panneauMenu);
     else fermerPanneaux();
   });
   $("#fermer-menu").addEventListener("click", fermerPanneaux);
