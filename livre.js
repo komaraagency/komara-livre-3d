@@ -1,9 +1,10 @@
-/* Komara Academy — moteur du livre 3D
-   - couverture qui s'ouvre
-   - pages tournees au doigt (glissement en direct)
-   - lecture a voix haute (Web Speech API)
-   - bot qui repond a partir du contenu du livre
-   - feuilles vierges editables, sauvegardees sur l'appareil
+/* Komara Academy — moteur du livre 3D (v15)
+   - couverture qui s'ouvre, pages tournees au doigt (seuil bas)
+   - lecture a voix haute : voix la plus naturelle, phrases courtes, pauses
+   - ecriture : zones d'exercice + panneau de notes, sauvegardes sur l'appareil
+   - bot qui repond du contenu du livre et des infos Komara
+   - partage de l'application, langue FR / EN / AR
+   - pied de page sur chaque page
 */
 
 (() => {
@@ -11,19 +12,104 @@
 
   const LIVRE = window.LIVRE || { pages: [], vierges: [] };
   const CLE = "komara-livre-v1";
+  const CLE_LANG = "komara-livre-langue";
   const WA = "212701986219";
+  const LIEN = "https://komaraagency.github.io/komara-livre-3d/";
   const DUREE = 850;
+  const PIED = "komara Agency 🇬🇳 pour vous servir";
+
+  /* ================= LANGUES ================= */
+  const T = {
+    fr: {
+      prec: "Précédent", sommaire: "Sommaire", ecrire: "Écrire", ecouter: "Écouter",
+      livre: "Le livre", suiv: "Suivant",
+      botTitre: "Le livre répond", botSous: "Pose ta question sur le contenu",
+      ecrTitre: "Écrire", ecrSous: "Ta note reste sur ton téléphone",
+      ecrFeuille: "Nouvelle page du livre", ecrFini: "C'est noté ✓",
+      ecrNote: "Tu peux aussi écrire dans les zones « Ma réponse » sous chaque exercice.",
+      optTitre: "Options", optSous: "Ton livre, tes règles",
+      partager: "Partager l'application", copier: "Copier le lien",
+      allerSom: "Aller au sommaire", ajouter: "Ajouter une feuille vierge",
+      exporter: "Exporter mes notes", effacer: "Effacer mes notes",
+      langue: "Langue", parler: "Parler à Komara",
+      note: "Les feuilles vierges se remplissent directement dans le livre. Ton texte reste sur ton téléphone.",
+      couverture: "Couverture", page: "Page", sur: "sur",
+      ouvrePage: "Ouvrir la page", lienCopie: "Lien copié ✓", indecrisible: "Cette page est vide",
+      pasVoix: "La lecture vocale n'est pas disponible sur ce navigateur",
+      toastOuvre: "Touche la couverture pour ouvrir 📖",
+      feuilleAjoutee: "Feuille vierge ajoutée 📄", notesExportees: "Notes exportées ⬇️",
+      noteEnregistree: "Note enregistrée ✓", effaceConfirme: "Effacer tout ce que tu as écrit ?",
+      notesEffacees: "Notes effacées",
+      accueil: "Bonjour 👋 Je suis le livre et je réponds sur mon contenu : une balise, les liens, les formulaires, la mise en ligne. Je connais aussi les prix de Komara.",
+      sugg: ["C'est quoi une balise ?", "Comment créer un lien ?", "Comment mettre mon site en ligne ?", "Combien coûte un site vitrine ?"],
+      vide: "Je n'ai pas trouvé cette réponse dans le livre. Écris à Komara Agency sur WhatsApp, la réponse arrive en 2 minutes.",
+      detail: "Écris ta question avec un peu plus de détails 🙂"
+    },
+    en: {
+      prec: "Back", sommaire: "Contents", ecrire: "Write", ecouter: "Listen",
+      livre: "Ask", suiv: "Next",
+      botTitre: "The book answers", botSous: "Ask anything about the content",
+      ecrTitre: "Write", ecrSous: "Your note stays on your phone",
+      ecrFeuille: "New page", ecrFini: "Saved ✓",
+      ecrNote: "You can also write in the “My answer” areas under each exercise.",
+      optTitre: "Options", optSous: "Your book, your rules",
+      partager: "Share the app", copier: "Copy the link",
+      allerSom: "Go to contents", ajouter: "Add a blank page",
+      exporter: "Export my notes", effacer: "Clear my notes",
+      langue: "Language", parler: "Talk to Komara",
+      note: "Blank pages are filled inside the book. Your text stays on your phone.",
+      couverture: "Cover", page: "Page", sur: "of",
+      ouvrePage: "Open page", lienCopie: "Link copied ✓", indecrisible: "This page is empty",
+      pasVoix: "Speech is not available in this browser",
+      toastOuvre: "Tap the cover to open 📖",
+      feuilleAjoutee: "Blank page added 📄", notesExportees: "Notes exported ⬇️",
+      noteEnregistree: "Note saved ✓", effaceConfirme: "Delete everything you wrote?",
+      notesEffacees: "Notes cleared",
+      accueil: "Hello 👋 I answer from the book: tags, links, forms, publishing. I also know Komara prices.",
+      sugg: ["What is a tag?", "How do I create a link?", "How do I publish my site?", "How much is a website?"],
+      vide: "I could not find that in the book. Message Komara Agency on WhatsApp and you will get an answer in 2 minutes.",
+      detail: "Please add a little more detail to your question 🙂"
+    },
+    ar: {
+      prec: "السابق", sommaire: "المحتويات", ecrire: "كتابة", ecouter: "استماع",
+      livre: "اسأل", suiv: "التالي",
+      botTitre: "الكتاب يجيب", botSous: "اسأل عن محتوى الكتاب",
+      ecrTitre: "كتابة", ecrSous: "ملاحظتك تبقى على هاتفك",
+      ecrFeuille: "صفحة جديدة", ecrFini: "تم الحفظ ✓",
+      ecrNote: "يمكنك أيضا الكتابة في خانة «جوابي» أسفل كل تمرين.",
+      optTitre: "خيارات", optSous: "كتابك، قواعدك",
+      partager: "مشاركة التطبيق", copier: "نسخ الرابط",
+      allerSom: "إلى المحتويات", ajouter: "إضافة صفحة فارغة",
+      exporter: "تصدير ملاحظاتي", effacer: "حذف ملاحظاتي",
+      langue: "اللغة", parler: "تحدث مع كومارا",
+      note: "الصفحات الفارغة تكتب فيها داخل الكتاب. نصك يبقى على هاتفك.",
+      couverture: "الغلاف", page: "صفحة", sur: "من",
+      ouvrePage: "افتح الصفحة", lienCopie: "تم نسخ الرابط ✓", indecrisible: "هذه الصفحة فارغة",
+      pasVoix: "القراءة الصوتية غير متوفرة في هذا المتصفح",
+      toastOuvre: "المس الغلاف لفتح الكتاب 📖",
+      feuilleAjoutee: "تمت إضافة صفحة 📄", notesExportees: "تم تصدير الملاحظات ⬇️",
+      noteEnregistree: "تم حفظ الملاحظة ✓", effaceConfirme: "حذف كل ما كتبته؟",
+      notesEffacees: "تم حذف الملاحظات",
+      accueil: "مرحبا 👋 أجيب من محتوى الكتاب: الوسوم، الروابط، النماذج، النشر. وأعرف أيضا أسعار كومارا.",
+      sugg: ["ما هو الوسم؟", "كيف أنشئ رابطا؟", "كيف أنشر موقعي؟", "كم ثمن موقع؟"],
+      vide: "لم أجد هذا الجواب في الكتاب. راسل كومارا على واتساب وستحصل على جواب في دقيقتين.",
+      detail: "اكتب سؤالك بتفصيل أكثر 🙂"
+    }
+  };
+
+  let lang = "fr";
+  try { lang = localStorage.getItem(CLE_LANG) || "fr"; } catch (_) { lang = "fr"; }
+  if (!T[lang]) lang = "fr";
+  const t = (k) => (T[lang] && T[lang][k]) || T.fr[k] || k;
 
   let pages = [];
   let index = -1;
-  let enLecture = false;
   let sauvegardes = {};
 
   const $ = (s) => document.querySelector(s);
   const livreEl = $("#livre");
   const sceneEl = $("#scene");
   const couvertureEl = $("#couverture");
-  const compteurEl = $("#compteur");
   const etatPageEl = $("#etat-page");
   const btnPrec = $("#btn-prec");
   const btnSuiv = $("#btn-suiv");
@@ -32,7 +118,10 @@
   const voile = $("#voile");
   const panneauBot = $("#panneau-bot");
   const panneauMenu = $("#panneau-menu");
+  const panneauEcrire = $("#panneau-ecrire");
   const fil = $("#fil");
+  const noteTitre = $("#note-titre");
+  const noteCorps = $("#note-corps");
 
   /* ---------------- Divers ---------------- */
   let toastTimer = null;
@@ -40,7 +129,7 @@
     toastEl.textContent = txt;
     toastEl.classList.add("visible");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove("visible"), 2400);
+    toastTimer = setTimeout(() => toastEl.classList.remove("visible"), 2600);
   }
 
   function charger() {
@@ -53,7 +142,7 @@
     timerSauve = setTimeout(() => {
       try { localStorage.setItem(CLE, JSON.stringify(sauvegardes)); }
       catch (_) { toast("Mémoire du téléphone pleine"); }
-    }, 350);
+    }, 300);
   }
 
   /* ---------------- Construction ---------------- */
@@ -71,6 +160,37 @@
     }
   }
 
+  function piedDePage() {
+    const p = document.createElement("div");
+    p.className = "pied-page";
+    p.textContent = PIED;
+    return p;
+  }
+
+  function restaurerZones(racine, id) {
+    const s = sauvegardes[id];
+    if (!s) return;
+    racine.querySelectorAll("[data-champ]").forEach((el) => {
+      const v = s[el.dataset.champ];
+      if (typeof v !== "string") return;
+      if (el.dataset.champ === "titre") el.textContent = v;
+      else el.innerHTML = v;
+    });
+  }
+
+  function tete(numero, chapitre) {
+    const d = document.createElement("div");
+    d.className = "page-tete";
+    const c = document.createElement("span");
+    c.className = "page-chapitre";
+    c.textContent = chapitre || "";
+    const n = document.createElement("span");
+    n.className = "page-num";
+    n.textContent = "p. " + numero;
+    d.append(c, n);
+    return d;
+  }
+
   function creerFeuille(page, numero) {
     const f = document.createElement("div");
     f.className = "feuille";
@@ -78,17 +198,6 @@
 
     const recto = document.createElement("div");
     recto.className = "face recto papier";
-
-    const tete = document.createElement("div");
-    tete.className = "page-tete";
-    const chap = document.createElement("span");
-    chap.className = "page-chapitre";
-    chap.textContent = page.chapitre || "";
-    const num = document.createElement("span");
-    num.className = "page-num";
-    num.textContent = "p. " + numero;
-    tete.append(chap, num);
-    recto.appendChild(tete);
 
     if (page.vierge) {
       const badge = document.createElement("span");
@@ -102,32 +211,35 @@
       titre.dataset.placeholder = "Titre du cours";
       titre.dataset.page = page.id;
       titre.dataset.champ = "titre";
-      const sauvTitre = sauvegardes[page.id] && sauvegardes[page.id].titre;
-      titre.textContent = sauvTitre || page.titre || "";
+      titre.textContent = page.titre || "";
 
       const corps = document.createElement("div");
       corps.className = "champ-corps";
       corps.contentEditable = "true";
       corps.dataset.page = page.id;
       corps.dataset.champ = "corps";
-      corps.innerHTML = (sauvegardes[page.id] && sauvegardes[page.id].corps) || "";
 
-      recto.append(badge, titre, corps);
+      recto.append(badge, titre, corps, piedDePage());
+      restaurerZones(recto, page.id);
     } else {
       const corps = document.createElement("div");
       corps.className = "page-corps";
       corps.innerHTML = page.html;
-      recto.appendChild(corps);
+      recto.append(corps, piedDePage());
+      restaurerZones(recto, page.id);
     }
+    // le tete par-dessus (injecte en premier pour rester en haut)
+    recto.insertBefore(tete(numero, page.chapitre), recto.firstChild);
 
     const verso = document.createElement("div");
     verso.className = "face verso papier";
-    verso.innerHTML =
-      '<div class="page-tete"><span class="page-chapitre">' + (page.chapitre || "") +
-      '</span><span class="page-num">p. ' + (numero + 1) + "</span></div>" +
-      '<div class="page-corps"><p style="color:#8d8574;font-size:14px;margin-top:38%">' +
-      (page.vierge ? "(suite de la feuille)" : "Tourne la page avec ton doigt") +
-      "</p></div>";
+    const vCorps = document.createElement("div");
+    vCorps.className = "page-corps";
+    const aide = document.createElement("p");
+    aide.style.cssText = "color:#8d8574;font-size:14px;margin-top:38%";
+    aide.textContent = page.vierge ? "(suite de la feuille)" : "Tourne la page avec ton doigt";
+    vCorps.appendChild(aide);
+    verso.append(tete(numero + 1, page.chapitre), vCorps, piedDePage());
 
     f.append(recto, verso);
     return f;
@@ -151,10 +263,11 @@
 
   function majTextes() {
     if (index < 0) {
-      etatPageEl.textContent = "Couverture";
+      etatPageEl.textContent = t("couverture");
     } else {
       const p = pages[index];
-      etatPageEl.textContent = "Page " + (index + 1) + " sur " + pages.length + (p && p.chapitre ? " · " + p.chapitre : "");
+      etatPageEl.textContent = t("page") + " " + (index + 1) + " " + t("sur") + " " + pages.length +
+        (p && p.chapitre ? " · " + p.chapitre : "");
     }
     btnPrec.disabled = index < 0;
     btnSuiv.disabled = index >= pages.length - 1;
@@ -164,7 +277,6 @@
     if (!animer) livreEl.classList.add("glisse");
 
     couvertureEl.classList.toggle("tournee", index >= 0);
-    // fermee : la couverture couvre tout ; ouverte : elle passe derriere
     couvertureEl.style.zIndex = index >= 0 ? "10" : "1200";
 
     feuilles().forEach((f, i) => {
@@ -203,21 +315,23 @@
   });
 
   /* ---------------- Glissement au doigt ---------------- */
-  let actif = false, departX = 0, departY = 0, dx = 0, sens = 0;
-  let feuilleTiree = null, dernierX = 0, dernierT = 0, vitesse = 0;
+  let actif = false, departX = 0, departY = 0, dx = 0, sens = 0, tDepart = 0;
+  let feuilleTiree = null, dernierX = 0, dernierT = 0, vitesse = 0, echec = 0;
+
+  const dansEdition = (el) => !!(el && (el.isContentEditable ||
+    (el.closest && el.closest("input, textarea, .exo-reponse, .champ-corps"))));
 
   sceneEl.addEventListener("pointerdown", (e) => {
-    if (e.target.closest("button, a, input, textarea")) return;
-    if (e.target.isContentEditable) return;
+    if (e.target.closest("button, a, input, textarea, select")) return;
+    if (dansEdition(e.target)) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
 
     actif = true;
     departX = dernierX = e.clientX;
     departY = e.clientY;
-    dx = 0; sens = 0; vitesse = 0;
-    dernierT = performance.now();
+    tDepart = performance.now();
+    dx = 0; sens = 0; vitesse = 0; echec = 0;
     feuilleTiree = null;
-    try { sceneEl.setPointerCapture(e.pointerId); } catch (_) {}
   });
 
   sceneEl.addEventListener("pointermove", (e) => {
@@ -228,8 +342,8 @@
     dx = deltaX;
 
     if (sens === 0) {
-      if (Math.abs(deltaX) < 12 && Math.abs(deltaY) < 12) return;
-      // geste vertical : on laisse le texte defiler
+      // on attend un vrai debut de geste
+      if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
       if (Math.abs(deltaY) > Math.abs(deltaX)) { actif = false; return; }
       sens = deltaX < 0 ? -1 : 1;
 
@@ -249,18 +363,29 @@
     const largeur = sceneEl.clientWidth || 360;
     const p = Math.min(1, Math.abs(deltaX) / largeur);
 
-    const t = performance.now();
-    vitesse = (e.clientX - dernierX) / Math.max(1, t - dernierT);
-    dernierX = e.clientX; dernierT = t;
+    const now = performance.now();
+    vitesse = (e.clientX - dernierX) / Math.max(1, now - dernierT);
+    dernierX = e.clientX; dernierT = now;
 
     const angle = sens === -1 ? -180 * p : -180 * (1 - p);
     feuilleTiree.style.transition = "none";
     feuilleTiree.style.transform = "rotateY(" + angle + "deg)";
   }, { passive: true });
 
-  function finGlisse() {
+  function finGlisse(e) {
     if (!actif) return;
     actif = false;
+
+    const duree = performance.now() - tDepart;
+
+    // un simple tap sur le bord tourne la page
+    if (!feuilleTiree && Math.abs(dx) < 10 && duree < 420 && e && typeof e.clientX === "number") {
+      const largeur = sceneEl.clientWidth || 360;
+      const rel = (e.clientX - sceneEl.getBoundingClientRect().left) / largeur;
+      if (rel > 0.72) { suivant(); return; }
+      if (rel < 0.28) { precedent(); return; }
+      return;
+    }
 
     if (!feuilleTiree) { livreEl.classList.remove("glisse"); return; }
 
@@ -272,18 +397,16 @@
 
     const largeur = sceneEl.clientWidth || 360;
     const p = Math.min(1, Math.abs(dx) / largeur);
-    const franc = p > 0.26 || Math.abs(vitesse) > 0.4;
+    // beaucoup plus sensible qu'avant (0.26 -> 0.13)
+    const franc = p > 0.13 || Math.abs(vitesse) > 0.16;
 
     const versSuivante = sens === -1;
-    const valide = franc;
 
-    // nouvel index
     let nouvelIndex = index;
-    if (valide) nouvelIndex = versSuivante ? index + 1 : index - 1;
+    if (franc) nouvelIndex = versSuivante ? index + 1 : index - 1;
     nouvelIndex = Math.max(-1, Math.min(pages.length - 1, nouvelIndex));
     const change = nouvelIndex !== index;
 
-    // on anime la feuille tiree jusqu'a sa position finale
     livreEl.classList.remove("glisse");
     f.style.transition = "";
     f.style.transform = change
@@ -296,7 +419,6 @@
       majTextes();
     }
 
-    // apres l'animation, on rend la main au CSS
     setTimeout(() => {
       f.style.transform = "";
       f.style.transition = "";
@@ -304,11 +426,12 @@
     }, DUREE + 60);
   }
 
-  sceneEl.addEventListener("pointerup", finGlisse);
-  sceneEl.addEventListener("pointercancel", finGlisse);
+  // sur window : le doigt peut sortir de la page pendant le geste
+  window.addEventListener("pointerup", finGlisse);
+  window.addEventListener("pointercancel", finGlisse);
 
   document.addEventListener("keydown", (e) => {
-    if (document.activeElement && document.activeElement.isContentEditable) return;
+    if (dansEdition(document.activeElement)) return;
     if (e.key === "ArrowRight") suivant();
     if (e.key === "ArrowLeft") precedent();
   });
@@ -316,73 +439,169 @@
   /* ---------------- Lecture a voix haute ---------------- */
   function textePage() {
     if (index < 0) {
-      return "Komara Academy. Le guide du business digital. Touche la couverture pour ouvrir le livre.";
+      return "Komara Academy. Apprendre le HTML pas a pas. Touche la couverture pour ouvrir le livre.";
     }
     const f = feuilles()[index];
     if (!f) return "";
     const z = f.querySelector(".page-corps") || f.querySelector(".champ-corps");
-    return z ? z.innerText.replace(/\s+/g, " ").trim() : "";
+    if (!z) return "";
+    const c = z.cloneNode(true);
+    c.querySelectorAll("pre, code, .exo-zone, .exo-label, .exo-reponse, .pied-page, script, style").forEach((n) => n.remove());
+    const blocs = [];
+    c.querySelectorAll("h2, h3, p, li, td, blockquote").forEach((el) => {
+      if (el.querySelector("p, li, blockquote")) return;
+      const s = (el.textContent || "").replace(/\s+/g, " ").trim();
+      if (s.length > 1) blocs.push(s);
+    });
+    return blocs.join(". ");
+  }
+
+  function nettoyerPourVoix(txt) {
+    let s = (txt || "")
+      .replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{FE0F}\u{2B00}-\u{2BFF}]/gu, " ")
+      .replace(/[«»""'']/g, " ")
+      .replace(/&[a-z]+;/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    // acronymes : on les fait epeler proprement
+    s = s.replace(/\bHTML\b/g, "H T M L")
+         .replace(/\bCSS\b/g, "C S S")
+         .replace(/\bSEO\b/g, "S E O")
+         .replace(/\bURL\b/g, "U R L")
+         .replace(/\bJS\b/g, "J S")
+         .replace(/\bW3C\b/g, "W 3 C")
+         .replace(/\bMDN\b/g, "M D N");
+
+    // prononciation francaise des mots importes
+    s = s.replace(/\bbots\b/gi, "botes")
+         .replace(/\bbot\b/gi, "bote")
+         .replace(/\bWhatsApp\b/gi, "Ouatsapp")
+         .replace(/\bGitHub\b/gi, "Guiteub")
+         .replace(/\biframe\b/gi, "i-frame")
+         .replace(/\bviewport\b/gi, "viou-porte")
+         .replace(/\blabel\b/gi, "labèle");
+
+    // les mots tout en majuscules font epeler : on les remet en minuscules
+    s = s.replace(/\b[A-ZÀ-ÖØ-Ý]{3,}\b/g, (m) => m.charAt(0) + m.slice(1).toLowerCase());
+    return s;
+  }
+
+  let voix = null;
+  function choisirVoix() {
+    if (!("speechSynthesis" in window)) return null;
+    const dispo = window.speechSynthesis.getVoices() || [];
+    if (!dispo.length) return null;
+    const cible = lang === "ar" ? "ar" : lang === "en" ? "en" : "fr";
+    let liste = dispo.filter((v) => (v.lang || "").toLowerCase().indexOf(cible) === 0);
+    if (!liste.length) liste = dispo.filter((v) => /^fr/i.test(v.lang));
+    if (!liste.length) liste = dispo;
+
+    const note = (v) => {
+      const n = ((v.name || "") + " " + (v.voiceURI || "")).toLowerCase();
+      let p = 0;
+      if (/natural|neural|online|premium|enhanced|siri/.test(n)) p += 8;
+      if (/google/.test(n)) p += 6;
+      if (/denise|amélie|amelie|audrey|thomas|marie|julie|hortense|virginie|samantha|maged|majed|zeina/.test(n)) p += 4;
+      if (v.localService) p += 1;
+      if (/compact|espeak|pico|robotique|robot/.test(n)) p -= 10;
+      return p;
+    };
+    return liste.sort((a, b) => note(b) - note(a))[0] || null;
+  }
+
+  let enLecture = false, fileVocale = [], posVocale = 0, pauseTimer = null;
+
+  function majBoutonLecture() {
+    btnLire.classList.toggle("actif", enLecture);
+    btnLire.querySelector(".o-ico").textContent = enLecture ? "⏸" : "🔊";
   }
 
   function arreterLecture() {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
     enLecture = false;
-    btnLire.classList.remove("actif");
-    btnLire.textContent = "🔊";
+    clearTimeout(pauseTimer);
+    fileVocale = [];
+    posVocale = 0;
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    majBoutonLecture();
+  }
+
+  function direSuivante() {
+    if (!enLecture) return;
+    if (posVocale >= fileVocale.length) { arreterLecture(); return; }
+    const u = new SpeechSynthesisUtterance(fileVocale[posVocale++]);
+    u.lang = lang === "ar" ? "ar-SA" : lang === "en" ? "en-US" : "fr-FR";
+    u.rate = 0.92;
+    u.pitch = 1;
+    u.volume = 1;
+    if (!voix) voix = choisirVoix();
+    if (voix) u.voice = voix;
+    u.onend = () => {
+      if (!enLecture) return;
+      // une vraie respiration entre les phrases : la lecture n'est plus monocorde
+      pauseTimer = setTimeout(direSuivante, 300);
+    };
+    u.onerror = () => {
+      if (!enLecture) return;
+      pauseTimer = setTimeout(direSuivante, 120);
+    };
+    try { window.speechSynthesis.speak(u); } catch (_) { arreterLecture(); }
   }
 
   function lire() {
-    if (!("speechSynthesis" in window)) {
-      toast("La lecture vocale n'est pas disponible sur ce navigateur");
-      return;
-    }
+    if (!("speechSynthesis" in window)) { toast(t("pasVoix")); return; }
     if (enLecture) { arreterLecture(); return; }
 
-    const texte = textePage();
-    if (!texte) { toast("Cette page est vide"); return; }
+    const brut = textePage();
+    if (!brut || brut.length < 3) { toast(t("indecrisible")); return; }
 
-    const u = new SpeechSynthesisUtterance(texte);
-    u.lang = "fr-FR";
-    u.rate = 0.98;
-    const voix = window.speechSynthesis.getVoices()
-      .find((v) => /^fr[-_]FR/i.test(v.lang)) ||
-      window.speechSynthesis.getVoices().find((v) => /^fr/i.test(v.lang));
-    if (voix) u.voice = voix;
-
-    const fin = () => {
-      enLecture = false;
-      btnLire.classList.remove("actif");
-      btnLire.textContent = "🔊";
-    };
-    u.onend = fin;
-    u.onerror = fin;
+    const propre = nettoyerPourVoix(brut);
+    const phrases = propre.match(/[^.!?…]+[.!?…]*/g) || [propre];
+    fileVocale = phrases.map((s) => s.trim()).filter((s) => s.length > 1);
+    if (!fileVocale.length) { toast(t("indecrisible")); return; }
 
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
+    voix = choisirVoix();
+    posVocale = 0;
     enLecture = true;
-    btnLire.classList.add("actif");
-    if (btnLire.classList) btnLire.classList.add("actif");
-    btnLire.textContent = "⏸";
+    majBoutonLecture();
+    direSuivante();
+  }
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", () => { voix = choisirVoix(); });
   }
   btnLire.addEventListener("click", lire);
-  if ("speechSynthesis" in window) window.speechSynthesis.getVoices();
 
   /* ---------------- Le livre repond ---------------- */
-  const ACCUEIL_BOT =
-    "Bonjour 👋 Je suis le livre. Pose-moi une question sur ce que tu viens de lire : les prix, les étapes d'un bot, les erreurs à éviter.";
-
-  const SUGGESTIONS = [
-    "Combien coûte un bot WhatsApp ?",
-    "Comment structurer un bot ?",
-    "Quelles erreurs éviter ?",
-    "Comment se passe le paiement ?"
+  const SAVOIR = [
+    {
+      test: /prix|tarif|co[uû]te|cout|devis|combien.*(€|euro|site|bot)|price|cost/i,
+      texte: "Grille Komara Agency, en euros : Bot Telegram 50 €, Bot WhatsApp vendeur 100 €, Agent IA Premium 150 €, maintenance 50 € par mois, site vitrine 250 €, logo 50 €. Paiement 50 % à la commande et 50 % à la livraison.",
+      page: -1
+    },
+    {
+      test: /contact|joindre|téléphone|telephone|whatsapp|e-?mail|adresse|numéro|numero/i,
+      texte: "Komara Agency : WhatsApp +212 701 986 219, e-mail ndinekomara2442@gmail.com. Basée à Casablanca, on travaille aussi en Guinée.",
+      page: -1
+    },
+    {
+      test: /qui (est|es)|komara agency|c'est quoi komara|agence/i,
+      texte: "Komara Agency est une agence de Ndine Komara, basée à Casablanca : sites vitrines, bots WhatsApp et design. Ce livre est son cours de HTML.",
+      page: -1
+    },
+    {
+      test: /combien de chapitres|sommaire|programme|plan du livre/i,
+      texte: "Le livre compte 20 chapitres en 5 parties : les bases, structurer, formulaires, qualité et pratique, plus 5 annexes. Le sommaire est la première page.",
+      page: 0
+    }
   ];
 
-  const VIDES = ["les","des","une","que","qui","pour","avec","dans","sur","est","comment","quoi","combien","quel","quelle","mon","ton","son","the"];
+  const VIDES = ["les", "des", "une", "que", "qui", "pour", "avec", "dans", "sur", "est", "comment", "quoi", "combien", "quel", "quelle", "mon", "ton", "son", "the", "how", "what", "does"];
 
-  function mots(t) {
-    return (t || "").toLowerCase()
+  function mots(txt) {
+    return (txt || "").toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9\s]/g, " ")
       .split(/\s+/)
@@ -397,23 +616,28 @@
       const info = pages[i] || {};
       const complement = " " + (info.motsCles || "") + " " + (info.titre || "");
       z.querySelectorAll("p, li, h2, h3, td").forEach((el) => {
-        const t = el.innerText.replace(/\s+/g, " ").trim();
-        if (t.length > 8) out.push({ texte: t, page: i, titre: info.titre || "", complement });
+        const s = (el.textContent || "").replace(/\s+/g, " ").trim();
+        if (s.length > 8) out.push({ texte: s, page: i, titre: info.titre || "", complement: complement });
       });
     });
     return out;
   }
 
   function repondre(question) {
-    const mq = mots(question);
-    if (!mq.length) return { texte: "Écris ta question avec un peu plus de détails 🙂", page: -1 };
+    const q = question || "";
+    const mq = mots(q);
+    if (!mq.length) return { texte: t("detail"), page: -1 };
+
+    // 1) les informations de l'agence passent avant le contenu du livre
+    for (let i = 0; i < SAVOIR.length; i++) {
+      if (SAVOIR[i].test.test(q)) return { texte: SAVOIR[i].texte, page: SAVOIR[i].page };
+    }
 
     const liste = passages();
     if (!liste.length) {
       return { texte: "Les pages ne sont pas encore chargées. Réessaie dans un instant.", page: -1 };
     }
 
-    /* ---- 1. choisir la PAGE : les mots rares pèsent plus que les mots banals ---- */
     const sacsPage = pages.map((p) => new Set(mots((p.motsCles || "") + " " + (p.titre || "") + " " + (p.chapitre || ""))));
     const dfPage = {};
     sacsPage.forEach((sac) => sac.forEach((m) => { dfPage[m] = (dfPage[m] || 0) + 1; }));
@@ -434,7 +658,6 @@
       if (sc > meilleurScore) { meilleurScore = sc; meilleurePage = i; }
     });
 
-    /* ---- 2. choisir le meilleur PASSAGE ---- */
     const dansLaPage = meilleurePage >= 0 ? liste.filter((x) => x.page === meilleurePage) : liste;
     const vivier = dansLaPage.length ? dansLaPage : liste;
 
@@ -461,15 +684,11 @@
     const best = notes[0];
 
     if (!best || (meilleurScore === 0 && (!best.score || best.score < 1.1))) {
-      return {
-        texte: "Je n'ai pas encore cette réponse dans le livre. Écris à Komara Agency sur WhatsApp, la réponse arrive en 2 minutes.",
-        page: -1,
-        wa: true
-      };
+      return { texte: t("vide"), page: -1, wa: true };
     }
 
-    const t = best.texte;
-    return { texte: t.length > 420 ? t.slice(0, 415) + "…" : t, page: best.page };
+    const txt = best.texte;
+    return { texte: txt.length > 420 ? txt.slice(0, 415) + "…" : txt, page: best.page };
   }
 
   function bulle(texte, qui, page) {
@@ -480,7 +699,7 @@
       const b = document.createElement("button");
       b.className = "aller";
       b.type = "button";
-      b.textContent = "Ouvrir la page " + (page + 1);
+      b.textContent = t("ouvrePage") + " " + (page + 1);
       b.addEventListener("click", () => { fermerPanneaux(); allerA(page); });
       d.appendChild(document.createElement("br"));
       d.appendChild(b);
@@ -492,7 +711,7 @@
   function proposer() {
     const zone = document.createElement("div");
     zone.className = "suggestions";
-    SUGGESTIONS.forEach((s) => {
+    (t("sugg") || []).forEach((s) => {
       const b = document.createElement("button");
       b.type = "button";
       b.textContent = s;
@@ -515,29 +734,31 @@
         a.target = "_blank";
         a.rel = "noopener";
         a.style.cssText = "color:#FFD700;font-weight:700";
-        a.textContent = "💬 Ouvrir WhatsApp";
+        a.textContent = "💬 WhatsApp";
         d.appendChild(a);
         fil.appendChild(d);
         fil.scrollTop = fil.scrollHeight;
       }
-    }, 240);
+    }, 200);
   }
 
+  /* ---------------- Panneaux ---------------- */
   function ouvrirPanneau(p) {
-    [panneauBot, panneauMenu].forEach((x) => x.classList.remove("ouvert"));
+    [panneauBot, panneauMenu, panneauEcrire].forEach((x) => x.classList.remove("ouvert"));
     p.classList.add("ouvert");
     voile.classList.add("visible");
-    if (p === panneauBot) setTimeout(() => $("#question").focus(), 200);
+    if (p === panneauBot) setTimeout(() => $("#question").focus(), 180);
+    if (p === panneauEcrire) setTimeout(() => noteCorps.focus(), 180);
   }
   function fermerPanneaux() {
-    [panneauBot, panneauMenu].forEach((x) => x.classList.remove("ouvert"));
+    [panneauBot, panneauMenu, panneauEcrire].forEach((x) => x.classList.remove("ouvert"));
     voile.classList.remove("visible");
   }
   const estOuvert = (p) => p.classList.contains("ouvert");
 
   $("#btn-bot").addEventListener("click", () => {
     if (!estOuvert(panneauBot)) {
-      if (!fil.childElementCount) { bulle(ACCUEIL_BOT, "bot"); proposer(); }
+      if (!fil.childElementCount) { bulle(t("accueil"), "bot"); proposer(); }
       ouvrirPanneau(panneauBot);
     } else fermerPanneaux();
   });
@@ -552,6 +773,38 @@
     poser(q);
   });
 
+  /* ---------------- Ecrire ---------------- */
+  noteTitre.value = (sauvegardes._note && sauvegardes._note.titre) || "";
+  noteCorps.value = (sauvegardes._note && sauvegardes._note.corps) || "";
+
+  function sauverNote() {
+    sauvegardes._note = { titre: noteTitre.value, corps: noteCorps.value };
+    sauvegarder();
+  }
+  noteTitre.addEventListener("input", sauverNote);
+  noteCorps.addEventListener("input", sauverNote);
+
+  $("#btn-ecrire").addEventListener("click", () => {
+    if (estOuvert(panneauEcrire)) fermerPanneaux();
+    else ouvrirPanneau(panneauEcrire);
+  });
+  $("#fermer-ecrire").addEventListener("click", () => { sauverNote(); fermerPanneaux(); });
+  $("#ecrire-fini").addEventListener("click", () => {
+    sauverNote();
+    fermerPanneaux();
+    toast(t("noteEnregistree"));
+  });
+  $("#ecrire-feuille").addEventListener("click", () => {
+    sauverNote();
+    sauvegardes._ajoutees = (sauvegardes._ajoutees || 0) + 1;
+    try { localStorage.setItem(CLE, JSON.stringify(sauvegardes)); } catch (_) {}
+    construirePages();
+    dessiner();
+    fermerPanneaux();
+    allerA(pages.length - 1);
+    toast(t("feuilleAjoutee"));
+  });
+
   /* ---------------- Menu ---------------- */
   $("#btn-menu").addEventListener("click", () => {
     if (!estOuvert(panneauMenu)) ouvrirPanneau(panneauMenu);
@@ -561,6 +814,32 @@
   voile.addEventListener("click", fermerPanneaux);
   $("#menu-sommaire").addEventListener("click", () => { fermerPanneaux(); allerA(0); });
 
+  /* ---------------- Partage ---------------- */
+  async function partager() {
+    const data = {
+      title: LIVRE.titre || "Apprendre le HTML pas à pas",
+      text: "Le livre interactif de Komara Academy : 20 chapitres, exercices et corrigés.",
+      url: LIEN
+    };
+    if (navigator.share) {
+      try { await navigator.share(data); fermerPanneaux(); return; } catch (_) { /* annule */ }
+    }
+    copierLien();
+  }
+
+  function copierLien() {
+    const fini = () => toast(t("lienCopie"));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(LIEN).then(fini).catch(() => { window.prompt("Lien :", LIEN); });
+    } else {
+      window.prompt("Lien :", LIEN);
+      fini();
+    }
+  }
+
+  $("#menu-partager").addEventListener("click", partager);
+  $("#menu-copier").addEventListener("click", copierLien);
+
   $("#menu-ajouter").addEventListener("click", () => {
     sauvegardes._ajoutees = (sauvegardes._ajoutees || 0) + 1;
     try { localStorage.setItem(CLE, JSON.stringify(sauvegardes)); } catch (_) {}
@@ -568,16 +847,26 @@
     dessiner();
     fermerPanneaux();
     allerA(pages.length - 1);
-    toast("Feuille vierge ajoutée 📄");
+    toast(t("feuilleAjoutee"));
   });
 
   $("#menu-exporter").addEventListener("click", () => {
     const l = ["# Komara Academy — mes notes", ""];
+    if (sauvegardes._note && (sauvegardes._note.titre || sauvegardes._note.corps)) {
+      l.push("## " + (sauvegardes._note.titre || "Note libre"));
+      l.push(sauvegardes._note.corps || "");
+      l.push("");
+    }
     pages.forEach((p, i) => {
       const s = sauvegardes[p.id];
       if (!s) return;
+      const bouts = [];
+      if (s.corps) bouts.push(s.corps);
+      if (s.exo) bouts.push("Exercice : " + s.exo);
+      if (!bouts.length) return;
       l.push("## " + (s.titre || p.titre) + "  (page " + (i + 1) + ")");
-      l.push((s.corps || "").replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").trim() || "(vide)", "");
+      bouts.forEach((b) => l.push(String(b).replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").trim()));
+      l.push("");
     });
     const blob = new Blob([l.join("\n")], { type: "text/plain;charset=utf-8" });
     const a = document.createElement("a");
@@ -585,27 +874,55 @@
     a.download = "komara-academy-notes.txt";
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    toast("Notes exportées ⬇️");
+    toast(t("notesExportees"));
   });
 
   $("#menu-reset").addEventListener("click", () => {
-    if (!confirm("Effacer tout ce que tu as écrit dans les feuilles vierges ?")) return;
+    if (!confirm(t("effaceConfirme"))) return;
     sauvegardes = {};
     try { localStorage.removeItem(CLE); } catch (_) {}
+    noteTitre.value = "";
+    noteCorps.value = "";
     construirePages();
     dessiner();
     fermerPanneaux();
-    toast("Notes effacées");
+    toast(t("notesEffacees"));
   });
 
-  /* ---------------- Saisie des feuilles vierges ---------------- */
+  /* ---------------- Langue ---------------- */
+  function appliquerLangue() {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t(el.dataset.t); });
+    document.querySelectorAll(".langue-btn").forEach((b) => b.classList.toggle("actif", b.dataset.lang === lang));
+    majTextes();
+    voix = null;
+    // le bot repart dans la langue choisie
+    if (fil.childElementCount) {
+      fil.innerHTML = "";
+      bulle(t("accueil"), "bot");
+      proposer();
+    }
+  }
+
+  document.querySelectorAll(".langue-btn").forEach((b) => {
+    b.addEventListener("click", () => {
+      lang = b.dataset.lang;
+      try { localStorage.setItem(CLE_LANG, lang); } catch (_) {}
+      appliquerLangue();
+      $("#question").placeholder = lang === "ar" ? "سؤالك..." : lang === "en" ? "Your question..." : "Ta question...";
+      arreterLecture();
+    });
+  });
+
+  /* ---------------- Saisie (feuilles + exercices) ---------------- */
   livreEl.addEventListener("input", (e) => {
     const el = e.target;
     if (!el.dataset || !el.dataset.page) return;
     const id = el.dataset.page;
     sauvegardes[id] = sauvegardes[id] || {};
     sauvegardes[id][el.dataset.champ] =
-      el.dataset.champ === "corps" ? el.innerHTML : el.textContent;
+      el.dataset.champ === "titre" ? el.textContent : el.innerHTML;
     sauvegarder();
   });
 
@@ -614,15 +931,18 @@
   construirePages();
   dessiner();
   appliquerEtat(false);
+  appliquerLangue();
   $("#nom-livre").textContent = LIVRE.titre || "Komara Academy";
+  $("#question").placeholder = lang === "ar" ? "سؤالك..." : lang === "en" ? "Your question..." : "Ta question...";
 
-  setTimeout(() => { if (index < 0) toast("Touche la couverture pour ouvrir 📖"); }, 1500);
+  setTimeout(() => { if (index < 0) toast(t("toastOuvre")); }, 1500);
 
   window.__livre = {
     total: () => pages.length,
     index: () => index,
     allerA,
     repondre,
-    textePage
+    textePage,
+    langue: () => lang
   };
 })();

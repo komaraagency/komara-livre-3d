@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Apprendre le HTML pas à pas — Komara Academy</title>
-<meta name="description" content="Apprendre le HTML pas à pas : 20 chapitres, des exemples commentés, des exercices et leurs corrigés, jusqu'au mini-site complet en ligne.">
+<meta name="description" content="Apprendre le HTML pas à pas : 20 chapitres, des exemples commentés, des exercices corrigés, jusqu'au mini-site complet en ligne.">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="livre.css?v=14">
+<link rel="stylesheet" href="livre.css?v=15">
 </head>
 <body>
 
@@ -60,22 +60,25 @@
   </div>
 </main>
 
-<!-- ================= BARRE DU BAS (tabbar de l'app) ================= -->
+<!-- ================= BARRE DU BAS ================= -->
 <nav class="tabbar" aria-label="Navigation du livre">
   <button id="btn-prec" class="onglet" type="button" aria-label="Page précédente">
-    <span class="o-ico">‹</span><span class="o-txt">Précédent</span>
+    <span class="o-ico">‹</span><span class="o-txt" data-t="prec">Précédent</span>
   </button>
   <button id="btn-sommaire" class="onglet" type="button" aria-label="Sommaire">
-    <span class="o-ico">📑</span><span class="o-txt">Sommaire</span>
+    <span class="o-ico">📑</span><span class="o-txt" data-t="sommaire">Sommaire</span>
+  </button>
+  <button id="btn-ecrire" class="onglet" type="button" aria-label="Écrire">
+    <span class="o-ico">✏️</span><span class="o-txt" data-t="ecrire">Écrire</span>
   </button>
   <button id="btn-lire" class="onglet" type="button" aria-label="Écouter la page">
-    <span class="o-ico">🔊</span><span class="o-txt">Écouter</span>
+    <span class="o-ico">🔊</span><span class="o-txt" data-t="ecouter">Écouter</span>
   </button>
   <button id="btn-bot" class="onglet" type="button" aria-label="Poser une question">
-    <span class="o-ico">🤖</span><span class="o-txt">Le livre</span>
+    <span class="o-ico">🤖</span><span class="o-txt" data-t="livre">Le livre</span>
   </button>
   <button id="btn-suiv" class="onglet" type="button" aria-label="Page suivante">
-    <span class="o-ico">›</span><span class="o-txt">Suivant</span>
+    <span class="o-ico">›</span><span class="o-txt" data-t="suiv">Suivant</span>
   </button>
 </nav>
 
@@ -85,17 +88,40 @@
     <div class="panneau-titre">
       <span class="avatar">🤖</span>
       <div>
-        <strong>Le livre répond</strong>
-        <small>Pose ta question sur le contenu</small>
+        <strong data-t="botTitre">Le livre répond</strong>
+        <small data-t="botSous">Pose ta question sur le contenu</small>
       </div>
     </div>
     <button id="fermer-bot" class="rond" type="button" aria-label="Fermer">✕</button>
   </div>
   <div class="fil" id="fil"></div>
   <form class="poser" id="form-bot">
-    <input id="question" type="text" placeholder="Ex : combien coûte un bot WhatsApp ?" autocomplete="off">
+    <input id="question" type="text" placeholder="Ta question..." autocomplete="off">
     <button type="submit" aria-label="Envoyer">➤</button>
   </form>
+</aside>
+
+<!-- ================= PANNEAU ECRIRE ================= -->
+<aside class="panneau" id="panneau-ecrire">
+  <div class="panneau-tete">
+    <div class="panneau-titre">
+      <span class="avatar">✏️</span>
+      <div>
+        <strong data-t="ecrTitre">Écrire</strong>
+        <small data-t="ecrSous">Ta note reste sur ton téléphone</small>
+      </div>
+    </div>
+    <button id="fermer-ecrire" class="rond" type="button" aria-label="Fermer">✕</button>
+  </div>
+  <div class="ecrire-corps">
+    <input id="note-titre" class="ecrire-titre" type="text" placeholder="Titre de ta note" autocomplete="off">
+    <textarea id="note-corps" class="ecrire-zone" placeholder="Écris ici ton code, tes réponses, tes idées..." spellcheck="false"></textarea>
+    <div class="ecrire-actions">
+      <button id="ecrire-feuille" class="ecrire-btn fantome" type="button" data-t="ecrFeuille">Nouvelle page du livre</button>
+      <button id="ecrire-fini" class="ecrire-btn" type="button" data-t="ecrFini">C'est noté ✓</button>
+    </div>
+    <p class="ecrire-note" data-t="ecrNote">Tu peux aussi écrire directement dans les zones « Ma réponse » sous chaque exercice.</p>
+  </div>
 </aside>
 
 <!-- ================= PANNEAU MENU ================= -->
@@ -104,28 +130,40 @@
     <div class="panneau-titre">
       <span class="avatar">☰</span>
       <div>
-        <strong>Options</strong>
-        <small>Ton livre, tes règles</small>
+        <strong data-t="optTitre">Options</strong>
+        <small data-t="optSous">Ton livre, tes règles</small>
       </div>
     </div>
     <button id="fermer-menu" class="rond" type="button" aria-label="Fermer">✕</button>
   </div>
   <div class="menu-liste">
-    <button id="menu-ajouter" class="menu-item" type="button"><span>➕</span><span>Ajouter une feuille vierge</span></button>
-    <button id="menu-sommaire" class="menu-item" type="button"><span>📑</span><span>Aller au sommaire</span></button>
-    <button id="menu-exporter" class="menu-item" type="button"><span>📤</span><span>Exporter mes notes</span></button>
-    <button id="menu-reset" class="menu-item" type="button"><span>🧹</span><span>Effacer mes notes</span></button>
-    <a href="https://wa.me/212701986219?text=Bonjour%20Komara%20Agency%2C%20je%20veux%20parler%20du%20livre" class="menu-item" target="_blank" rel="noopener"><span>💬</span><span>Parler à Komara</span></a>
+    <button id="menu-partager" class="menu-item" type="button"><span>🔗</span><span data-t="partager">Partager l'application</span></button>
+    <button id="menu-copier" class="menu-item" type="button"><span>📋</span><span data-t="copier">Copier le lien</span></button>
+    <button id="menu-sommaire" class="menu-item" type="button"><span>📑</span><span data-t="allerSom">Aller au sommaire</span></button>
+    <button id="menu-ajouter" class="menu-item" type="button"><span>➕</span><span data-t="ajouter">Ajouter une feuille vierge</span></button>
+    <button id="menu-exporter" class="menu-item" type="button"><span>📤</span><span data-t="exporter">Exporter mes notes</span></button>
+    <button id="menu-reset" class="menu-item" type="button"><span>🧹</span><span data-t="effacer">Effacer mes notes</span></button>
+
+    <div class="menu-langue">
+      <span class="menu-langue-titre" data-t="langue">Langue</span>
+      <div class="langue-boutons">
+        <button class="langue-btn actif" data-lang="fr" type="button">FR</button>
+        <button class="langue-btn" data-lang="en" type="button">EN</button>
+        <button class="langue-btn" data-lang="ar" type="button">AR</button>
+      </div>
+    </div>
+
+    <a href="https://wa.me/212701986219?text=Bonjour%20Komara%20Agency%2C%20je%20veux%20parler%20du%20livre" class="menu-item" target="_blank" rel="noopener"><span>💬</span><span data-t="parler">Parler à Komara</span></a>
   </div>
-  <p class="menu-note">Les feuilles vierges se remplissent directement dans le livre. Ton texte reste sur ton téléphone.</p>
+  <p class="menu-note" data-t="note">Les feuilles vierges se remplissent directement dans le livre. Ton texte reste sur ton téléphone.</p>
 </aside>
 
 <div class="voile" id="voile"></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="pages-data.js?v=14"></script>
-<script src="livre.js?v=14"></script>
-<script src="pwa.js?v=14" defer></script>
+<script src="pages-data.js?v=15"></script>
+<script src="livre.js?v=15"></script>
+<script src="pwa.js?v=15" defer></script>
 </body>
 </html>
