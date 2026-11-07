@@ -65,7 +65,7 @@ window.LIVRE = {
       `
     },
     {
-      id: "c1p3", motsCles: "scenario etapes structure comment construire relance catalogue commande objections",
+      id: "c1p3", motsCles: "scenario etapes structure comment construire relance catalogue commande objections structurer etapes bot scenario",
       chapitre: "Cours 1",
       titre: "Le scénario qui vend, en 5 étapes",
       html: `
