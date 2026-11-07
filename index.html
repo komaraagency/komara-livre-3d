@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Komara Academy — Le livre intelligent</title>
+<meta name="description" content="Livre 3D interactif : couverture qui s'ouvre, pages qui se tournent au doigt, lecture à voix haute et bot qui répond aux questions.">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="livre.css">
+</head>
+<body>
+
+<!-- ================= BARRE DU HAUT ================= -->
+<header class="barre-haut">
+  <div class="marque">
+    <img src="icon-192.png" alt="" class="marque-ico">
+    <div class="marque-txt">
+      <strong id="nom-livre">Komara Academy</strong>
+      <span id="etat-page">Couverture</span>
+    </div>
+  </div>
+  <div class="actions">
+    <button id="btn-lire" class="rond" type="button" title="Lire à voix haute" aria-label="Lire à voix haute">🔊</button>
+    <button id="btn-bot" class="rond" type="button" title="Poser une question" aria-label="Poser une question">🤖</button>
+    <button id="btn-menu" class="rond" type="button" title="Options" aria-label="Options">☰</button>
+  </div>
+</header>
+
+<!-- ================= LE LIVRE ================= -->
+<main class="etagere">
+  <div class="scene" id="scene">
+    <div class="livre" id="livre" aria-live="polite">
+
+      <!-- Couverture -->
+      <div class="feuille couverture" id="couverture" data-type="couverture">
+        <div class="face recto">
+          <div class="couv-cadre">
+            <div class="couv-drapeau"></div>
+            <img src="icon-192.png" alt="" class="couv-logo">
+            <h1 class="couv-titre">Komara<br>Academy</h1>
+            <p class="couv-sous">Le guide du business digital</p>
+            <div class="couv-ligne"></div>
+            <p class="couv-auteur">Komara Agency 🇬🇳 · Édition 2026</p>
+            <button class="couv-ouvrir" id="btn-ouvrir" type="button">Ouvrir le livre</button>
+            <p class="couv-aide">Touche la couverture</p>
+          </div>
+        </div>
+        <div class="face verso interieur">
+          <div class="garde">
+            <p class="garde-titre">Komara Academy</p>
+            <p class="garde-texte">Ce livre t'apprend à transformer WhatsApp en machine à vendre. Tourne la page avec ton doigt.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Les pages sont ajoutées par livre.js -->
+
+      <!-- tranche du livre (décor) -->
+      <div class="tranche" aria-hidden="true"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= BARRE DU BAS ================= -->
+<footer class="barre-bas">
+  <button id="btn-prec" class="nav" type="button" aria-label="Page précédente">‹</button>
+  <button id="btn-sommaire" class="compteur" type="button">
+    <span id="compteur">Couverture</span>
+    <small>Sommaire</small>
+  </button>
+  <button id="btn-suiv" class="nav" type="button" aria-label="Page suivante">›</button>
+</footer>
+
+<!-- ================= PANNEAU DU BOT ================= -->
+<aside class="panneau" id="panneau-bot" hidden>
+  <div class="panneau-tete">
+    <div class="panneau-titre">
+      <span class="avatar">🤖</span>
+      <div>
+        <strong>Le livre répond</strong>
+        <small>Pose ta question sur le contenu</small>
+      </div>
+    </div>
+    <button id="fermer-bot" class="rond" type="button" aria-label="Fermer">✕</button>
+  </div>
+  <div class="fil" id="fil"></div>
+  <form class="poser" id="form-bot">
+    <input id="question" type="text" placeholder="Ex : combien coûte un bot WhatsApp ?" autocomplete="off">
+    <button type="submit" aria-label="Envoyer">➤</button>
+  </form>
+</aside>
+
+<!-- ================= PANNEAU MENU ================= -->
+<aside class="panneau" id="panneau-menu" hidden>
+  <div class="panneau-tete">
+    <div class="panneau-titre">
+      <span class="avatar">☰</span>
+      <div>
+        <strong>Options</strong>
+        <small>Ton livre, tes règles</small>
+      </div>
+    </div>
+    <button id="fermer-menu" class="rond" type="button" aria-label="Fermer">✕</button>
+  </div>
+  <div class="menu-liste">
+    <button id="menu-ajouter" class="menu-item" type="button"><span>➕</span><span>Ajouter une feuille vierge</span></button>
+    <button id="menu-sommaire" class="menu-item" type="button"><span>📑</span><span>Aller au sommaire</span></button>
+    <button id="menu-exporter" class="menu-item" type="button"><span>📤</span><span>Exporter mes notes</span></button>
+    <button id="menu-reset" class="menu-item" type="button"><span>🧹</span><span>Effacer mes notes</span></button>
+    <a href="https://wa.me/212701986219?text=Bonjour%20Komara%20Agency%2C%20je%20veux%20parler%20du%20livre" class="menu-item" target="_blank" rel="noopener"><span>💬</span><span>Parler à Komara</span></a>
+  </div>
+  <p class="menu-note">Les feuilles vierges se remplissent directement dans le livre. Ton texte reste sur ton téléphone.</p>
+</aside>
+
+<div class="voile" id="voile" hidden></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="pages-data.js"></script>
+<script src="livre.js"></script>
+<script src="pwa.js" defer></script>
+</body>
+</html>
