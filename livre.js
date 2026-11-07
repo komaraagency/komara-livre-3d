@@ -517,7 +517,8 @@
   function nettoyerPourVoix(txt) {
     let s = (txt || "")
       .replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{FE0F}\u{2B00}-\u{2BFF}]/gu, " ")
-      .replace(/[«»""'']/g, " ")
+      .replace(/[\u2019\u2018\u02BC]/g, "'")
+      .replace(/[«»\u201C\u201D"]/g, " ")
       .replace(/&[a-z]+;/gi, " ")
       .replace(/\s+/g, " ")
       .trim();
@@ -536,7 +537,7 @@
       p:"p", br:"b r", hr:"h r", em:"em", img:"image", src:"s r c", alt:"alt", href:"h ref",
       th:"t h", td:"t d", tr:"t r", li:"l i", ul:"u l", ol:"o l", nav:"nave", div:"dive", span:"spane",
       a:"a", id:"i d", css:"c s s", js:"j s", abbr:"abréviation", colspan:"col span", rowspan:"row span" };
-    s = s.replace(/\b(h[1-6]|br|hr|img|src|href|abbr|colspan|rowspan|th|td|tr|li|ul|ol|nav|div|span|id)\b/gi, (m) => BAL[m.toLowerCase()] || m);
+    s = s.replace(/(?<![\p{L}\p{N}])(h[1-6]|br|hr|img|src|href|abbr|colspan|rowspan|th|td|tr|li|ul|ol|nav|div|span|id)(?![\p{L}\p{N}])/giu, (m) => BAL[m.toLowerCase()] || m);
 
     // prononciation francaise des mots importes
     s = s.replace(/\bbots\b/gi, "botes")
@@ -549,6 +550,7 @@
 
     // les mots tout en majuscules font epeler : on les remet en minuscules
     s = s.replace(/\b[A-ZÀ-ÖØ-Ý]{3,}\b/g, (m) => m.charAt(0) + m.slice(1).toLowerCase());
+    s = s.replace(/([.!?…])\s*\.+/g, "$1").replace(/\s+([,.;:!?])/g, "$1");
     return s;
   }
 
