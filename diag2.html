@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>diagnostic bot</title>
+<style>body{margin:0;background:#111;color:#9f9;font-family:monospace;font-size:12px;padding:10px;white-space:pre-wrap}
+iframe{width:390px;height:600px;border:4px solid #333;border-radius:18px;display:block;margin-top:8px}</style>
+</head><body>
+<div id="mes">mesure…</div>
+<iframe id="f" src="about:blank"></iframe>
+<script>
+(async () => {
+  const l = [];
+  try {
+    for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+    for (const n of await caches.keys()) await caches.delete(n);
+    l.push("caches purges");
+  } catch (e) { l.push("purge: " + e.message); }
+
+  const f = document.getElementById("f");
+  f.src = "index.html?t=" + Date.now();
+  f.onload = () => setTimeout(() => {
+    try {
+      const w = f.contentWindow;
+      const api = w.__livre;
+      if (!api) { afficher(l.concat(["ERREUR : __livre absent"])); return; }
+      const pages = api.pages();
+      l.push("pages : " + pages.length);
+      const avecCles = pages.filter(p => p.motsCles && p.motsCles.length > 3).length;
+      l.push("pages avec mots-cles : " + avecCles);
+      const psg = api.passages();
+      l.push("passages indexes : " + psg.length);
+      l.push("");
+      const questions = [
+        "combien coute un site vitrine ?",
+        "quelles erreurs eviter ?",
+        "c est quoi un agent IA premium ?",
+        "combien coute un bot WhatsApp ?",
+        "comment structurer un bot ?"
+      ];
+      questions.forEach(q => {
+        const r = api.repondre(q);
+        l.push("Q " + q + "\n  -> page " + ((r.page || 0) + 1) + " | " + (r.texte || "").slice(0, 90));
+      });
+      afficher(l);
+    } catch (e) { afficher(l.concat(["ERREUR " + e.message])); }
+  }, 2200);
+  function afficher(lignes) { document.getElementById("mes").textContent = lignes.join("\n"); }
+})();
+</script>
+</body></html>
