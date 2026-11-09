@@ -15,7 +15,19 @@
   const CLE_LANG = "komara-livre-langue";
   const WA = "212701986219";
   const LIEN = "https://komaraagency.github.io/komara-livre-3d/";
-  const DUREE = 850;
+  const DUREE = 600;
+
+  /* Certains navigateurs (apercus integres, vieux WebView) ignorent la 3D :
+     on passe alors en mode "une page a la fois" au lieu d'aplatir le livre. */
+  const MODE_PLAT = (() => {
+    try {
+      const d = document.createElement("div");
+      d.style.transformStyle = "preserve-3d";
+      d.style.perspective = "100px";
+      return d.style.transformStyle !== "preserve-3d" || d.style.perspective !== "100px";
+    } catch (_) { return true; }
+  })();
+  if (MODE_PLAT) document.documentElement.classList.add("mode-plat");
 
   /* ================= LANGUES ================= */
   const T = {
@@ -294,7 +306,27 @@
     btnSuiv.disabled = index >= pages.length - 1;
   }
 
+  /* Verrou : evite les etats melanges quand on enchaine les gestes */
+  let animEnCours = false;
+  let minuteurAnim = null;
+
+  function nettoyerInline() {
+    [couvertureEl].concat(feuilles()).forEach((f) => {
+      f.style.transform = "";
+      f.style.transition = "";
+      f.classList.remove("anime");
+    });
+  }
+
+  function finAnimation() {
+    animEnCours = false;
+    if (minuteurAnim) { clearTimeout(minuteurAnim); minuteurAnim = null; }
+    nettoyerInline();
+    livreEl.classList.remove("glisse");
+  }
+
   function appliquerEtat(animer) {
+    nettoyerInline();
     if (!animer) livreEl.classList.add("glisse");
 
     couvertureEl.classList.toggle("tournee", index >= 0);
@@ -303,11 +335,20 @@
     feuilles().forEach((f, i) => {
       const tournee = i < index;
       f.classList.toggle("tournee", tournee);
-      f.style.transform = "";
       f.style.zIndex = tournee ? String(20 + i) : String(400 - i);
+      if (MODE_PLAT) f.style.display = i === index ? "" : "none";
     });
+    if (MODE_PLAT) couvertureEl.style.display = index < 0 ? "" : "none";
 
-    if (!animer) {
+    if (animer) {
+      animEnCours = true;
+      if (minuteurAnim) clearTimeout(minuteurAnim);
+      minuteurAnim = setTimeout(() => {
+        animEnCours = false;
+        minuteurAnim = null;
+        livreEl.classList.remove("glisse");
+      }, DUREE + 40);
+    } else {
       void livreEl.offsetHeight;
       requestAnimationFrame(() => livreEl.classList.remove("glisse"));
     }
@@ -317,6 +358,12 @@
   function allerA(n) {
     n = Math.max(-1, Math.min(pages.length - 1, n));
     if (n === index) return;
+    // si un tournoiement est en cours, on le termine proprement avant de continuer
+    if (animEnCours) {
+      animEnCours = false;
+      if (minuteurAnim) { clearTimeout(minuteurAnim); minuteurAnim = null; }
+      appliquerEtat(false);
+    }
     arreterLecture();
     index = n;
     appliquerEtat(true);
@@ -347,6 +394,7 @@
     if (dansEdition(e.target)) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
 
+    if (animEnCours || MODE_PLAT) return;
     actif = true;
     departX = dernierX = e.clientX;
     departY = e.clientY;
@@ -379,6 +427,7 @@
 
       if (!feuilleTiree) { actif = false; return; }
       livreEl.classList.add("glisse");
+      feuilleTiree.classList.add("anime");
       feuilleTiree.style.zIndex = "2000";
     }
 
@@ -441,9 +490,11 @@
       majTextes();
     }
 
-    setTimeout(() => {
-      f.style.transform = "";
-      f.style.transition = "";
+    animEnCours = true;
+    if (minuteurAnim) clearTimeout(minuteurAnim);
+    minuteurAnim = setTimeout(() => {
+      animEnCours = false;
+      minuteurAnim = null;
       appliquerEtat(false);
     }, DUREE + 60);
   }

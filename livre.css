@@ -25,7 +25,7 @@
   --u: clamp(15px, 4.45vw, 26px);
   --marge: clamp(10px, 3vw, 22px);
 
-  --duree: 0.85s;
+  --duree: 0.6s;
   --courbe: cubic-bezier(0.22, 0.75, 0.2, 1);
 }
 
@@ -95,6 +95,7 @@ body {
 /* ================= SCÈNE 3D ================= */
 .etagere {
   flex: 1 1 auto;
+  overscroll-behavior: contain;
   touch-action: pan-y;
   min-height: 0;
   display: flex;
@@ -108,6 +109,7 @@ body {
 /* le geste horizontal nous appartient, le vertical fait defiler */
 .scene {
   position: relative;
+  -webkit-tap-highlight-color: transparent;
   width: 100%;
   height: 100%;
   max-width: 40rem;
@@ -130,10 +132,11 @@ body {
   transform: rotateY(0deg);
   transition: transform var(--duree) var(--courbe);
   border-radius: 4px 12px 12px 4px;
-  will-change: transform;
   backface-visibility: visible;
+  -webkit-backface-visibility: visible;
 }
 .feuille.tournee { transform: rotateY(-180deg); }
+.feuille.anime { will-change: transform; }
 .livre.glisse .feuille { transition: none !important; }
 
 .face {
@@ -493,9 +496,11 @@ body {
   display: block;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.78);
+  /* pas de backdrop-filter : il casse le rendu 3D du livre sur Android */
   z-index: 40;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .panneau-tete { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; margin-bottom: 0.7rem; }
@@ -935,3 +940,10 @@ details.corrige > summary::after { content: "▾"; margin-left: auto; transition
 details.corrige[open] > summary::after { transform: rotate(180deg); }
 details.corrige > :not(summary) { margin-left: 0.9em; margin-right: 0.9em; }
 details.corrige > pre.code:last-child, details.corrige > p:last-child { margin-bottom: 0.9em; }
+
+
+/* ================= MODE PLAT (sans 3D) ================= */
+.mode-plat .livre { transform: none; }
+.mode-plat .feuille { transform: none !important; transition: none !important; }
+.mode-plat .feuille.tournee { transform: none !important; }
+.mode-plat .face.verso { display: none; }
